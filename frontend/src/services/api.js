@@ -19,6 +19,16 @@ export const grainApi = {
     return data
   },
 
+  /** Upload multiple images for batch analysis */
+  uploadBatch: async (files) => {
+    const form = new FormData()
+    files.forEach(file => form.append('files', file))
+    const { data } = await api.post('/upload-batch', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return data
+  },
+
   /** Simulate a hardware scanner scan */
   simulateScan: async () => {
     const { data } = await api.post('/simulate-scan')

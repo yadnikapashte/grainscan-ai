@@ -11,6 +11,7 @@ import {
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useTranslation } from 'react-i18next'
+import DefectHeatmap from '../components/DefectHeatmap'
 
 // Quality color palette
 const QUALITY_COLORS = {
@@ -299,6 +300,22 @@ export default function DashboardPage() {
                 </ResponsiveContainer>
               </div>
             </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-status-discolored/10 flex items-center justify-center text-status-discolored">
+                <TrendingUp size={16} />
+              </div>
+              <h3 className="text-xl font-display text-text-header">Spatial Defect Analytics</h3>
+            </div>
+            <DefectHeatmap 
+              grains={activeResult.grains || []} 
+              imgWidth={activeResult.img_width || 800} 
+              imgHeight={activeResult.img_height || 600} 
+              imageUrl={activeResult.annotated_image}
+              className="h-[460px]"
+            />
           </div>
         </div>
 

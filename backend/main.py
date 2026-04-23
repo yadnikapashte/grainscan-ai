@@ -11,7 +11,7 @@ import asyncio
 import base64
 from pathlib import Path
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 import cv2
 import numpy as np
@@ -124,6 +124,8 @@ def process_image_bytes(image_bytes: bytes, source: str = "upload") -> dict:
         "timestamp": datetime.utcnow().isoformat(),
         "grain_type": dominant_type,
         "total_grains": total,
+        "img_width": img.shape[1],
+        "img_height": img.shape[0],
         "type_counts": type_counts,
         "quality_counts": quality_counts,
         "quality_percentages": quality_pct,
@@ -159,6 +161,25 @@ async def upload_image(file: UploadFile = File(...)):
         return JSONResponse(content=result)
     except Exception as e:
         raise HTTPException(500, f"Analysis failed: {str(e)}")
+
+
+@app.post("/upload-batch")
+async def upload_batch(files: List[UploadFile] = File(...)):
+    """Accept multiple image uploads and analyze each."""
+    results = []
+    for file in files:
+        if not file.content_type.startswith("image/"):
+            continue
+        
+        contents = await file.read()
+        try:
+            result = process_image_bytes(contents, source="batch-upload")
+            result["filename"] = file.filename
+            results.append(result)
+        except Exception as e:
+            results.append({"filename": file.filename, "error": str(e)})
+            
+    return JSONResponse(content={"batch_id": str(uuid.uuid4())[:8], "results": results})
 
 
 @app.post("/scanner-input")

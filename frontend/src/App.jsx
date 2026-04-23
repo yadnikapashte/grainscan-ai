@@ -8,6 +8,7 @@ import ScannerPage from './pages/ScannerPage'
 import DashboardPage from './pages/DashboardPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import BatchPage from './pages/BatchPage'
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/upload" element={<UploadPage />} />
               <Route path="/scanner" element={<ScannerPage />} />
+              <Route path="/batch" element={<BatchPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
             </Route>
           </Route>
