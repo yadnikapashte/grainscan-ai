@@ -1,12 +1,14 @@
 /**
- * API service layer — all backend calls go through here.
- * Base URL reads from env var or defaults to localhost:8000
+ * Clean API service layer — all backend calls go through here.
  */
 import axios from 'axios'
 
 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
-const api = axios.create({ baseURL: BASE })
+const api = axios.create({ 
+  baseURL: BASE,
+  timeout: 60000 // 60 second timeout for large batches
+})
 
 export const grainApi = {
   /** Upload an image file for analysis */
@@ -53,11 +55,31 @@ export const grainApi = {
     return data
   },
 
+  /** Download a PDF report for a scan */
+  downloadReport: (resultId) => {
+    window.open(`${BASE}/report/${resultId}`, '_blank')
+  },
+
+  /** Download a consolidated PDF report for a batch */
+  downloadBatchReport: async (results) => {
+    const response = await api.post('/report-batch', results, {
+      responseType: 'blob'
+    })
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `GrainScan_Batch_Protocol_${new Date().getTime()}.pdf`)
+    document.body.appendChild(link)
+    link.click()
+    link.parentNode.removeChild(link)
+  },
+
   /** Health check */
   health: async () => {
     const { data } = await api.get('/health')
     return data
-  },
+  }
 }
 
+export const BASE_URL = BASE
 export default grainApi

@@ -4,7 +4,7 @@ import {
   Layers, Upload, FileText, CheckCircle, AlertCircle, 
   Loader2, Download, Trash2, ArrowRight
 } from 'lucide-react'
-import { grainApi } from '../services/api'
+import { grainApi, BASE_URL } from '../services/api'
 import { useTranslation } from 'react-i18next'
 
 export default function BatchPage() {
@@ -31,12 +31,19 @@ export default function BatchPage() {
     if (files.length === 0) return
     setProcessing(true)
     setError(null)
+    console.log('Sending batch request to server...')
     try {
       const data = await grainApi.uploadBatch(files)
-      setResults(data.results)
+      console.log('Results received:', data)
+      if (data && data.results) {
+        setResults(data.results)
+      } else {
+        throw new Error('Invalid server response format')
+      }
     } catch (err) {
       console.error('Batch error:', err)
-      setError('Failed to process batch. Please try again.')
+      const msg = err.response?.data?.detail || err.message || 'Unknown network error'
+      setError(`Critical Error: ${msg}. Backend URL: ${BASE_URL}`)
     } finally {
       setProcessing(false)
     }
@@ -82,11 +89,19 @@ export default function BatchPage() {
           </p>
         </div>
 
-        {results && (
-          <button onClick={exportCSV} className="btn-primary py-3 px-8 flex items-center gap-2">
-            <Download size={18} />
-            Download CSV Report
-          </button>
+          <div className="flex items-center gap-3">
+            <button onClick={exportCSV} className="btn-secondary py-3 px-8 flex items-center gap-2">
+              <Download size={18} />
+              Download CSV
+            </button>
+            <button 
+              onClick={() => grainApi.downloadBatchReport(results)} 
+              className="btn-primary py-3 px-8 flex items-center gap-2"
+            >
+              <Download size={18} />
+              Download Batch PDF
+            </button>
+          </div>
         )}
       </div>
 
@@ -152,18 +167,21 @@ export default function BatchPage() {
                   <button 
                     onClick={handleProcess}
                     disabled={processing}
-                    className="btn-primary py-4 px-12 text-sm flex items-center gap-3"
+                    className="btn-primary py-4 px-12 text-sm flex flex-col items-center gap-1 min-w-[280px]"
                   >
                     {processing ? (
                       <>
-                        <Loader2 className="animate-spin" size={18} />
-                        Processing Batch...
+                        <div className="flex items-center gap-3">
+                          <Loader2 className="animate-spin" size={18} />
+                          <span>AI High-Stability Scan...</span>
+                        </div>
+                        <span className="text-[10px] opacity-60 font-bold uppercase tracking-widest text-center">Processing samples sequentially for maximum accuracy</span>
                       </>
                     ) : (
-                      <>
-                        Analyze All Samples
+                      <div className="flex items-center gap-3">
+                        <span>Analyze All Samples</span>
                         <ArrowRight size={18} />
-                      </>
+                      </div>
                     )}
                   </button>
                 </div>

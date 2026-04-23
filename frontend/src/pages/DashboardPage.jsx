@@ -12,6 +12,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useTranslation } from 'react-i18next'
 import DefectHeatmap from '../components/DefectHeatmap'
+import { grainApi } from '../services/api'
 
 // Quality color palette
 const QUALITY_COLORS = {
@@ -244,7 +245,15 @@ export default function DashboardPage() {
             className="btn-secondary py-3 text-sm flex items-center gap-2"
           >
             <Download size={18} />
-            Export Protocol
+            Export JSON
+          </button>
+          
+          <button
+            onClick={() => grainApi.downloadReport(activeResult.id)}
+            className="btn-primary py-3 text-sm flex items-center gap-2"
+          >
+            <Download size={18} />
+            Laboratory PDF Report
           </button>
         </div>
       </div>

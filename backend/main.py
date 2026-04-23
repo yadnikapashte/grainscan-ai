@@ -12,6 +12,8 @@ import base64
 from pathlib import Path
 from datetime import datetime
 from typing import Optional, List
+from concurrent.futures import ThreadPoolExecutor
+import functools
 
 import cv2
 import numpy as np
@@ -23,6 +25,7 @@ from fastapi.staticfiles import StaticFiles
 from processing import GrainProcessor
 from model import GrainClassifier
 from scanner import ScannerWatcher
+from reports import generate_pdf_report, generate_batch_pdf_report
 
 # ── App setup ──────────────────────────────────────────────────────────────────
 app = FastAPI(
@@ -44,8 +47,9 @@ UPLOAD_DIR = Path("uploads")
 SCANNER_DIR = Path("scanner_watch")
 RESULTS_DIR = Path("results")
 ANNOTATED_DIR = Path("annotated")
+REPORTS_DIR = Path("reports")
 
-for d in [UPLOAD_DIR, SCANNER_DIR, RESULTS_DIR, ANNOTATED_DIR]:
+for d in [UPLOAD_DIR, SCANNER_DIR, RESULTS_DIR, ANNOTATED_DIR, REPORTS_DIR]:
     d.mkdir(exist_ok=True)
 
 # Mount static dirs
@@ -56,6 +60,7 @@ processor = GrainProcessor()
 classifier = GrainClassifier()
 scanner_watcher = ScannerWatcher(str(SCANNER_DIR))
 latest_scan_result: Optional[dict] = None
+executor = ThreadPoolExecutor(max_workers=4) # Parallel AI workers
 scan_active = False
 
 
@@ -86,14 +91,21 @@ def process_image_bytes(image_bytes: bytes, source: str = "upload") -> dict:
             "confidence": round(confidence, 3),
         })
 
-    # Aggregate results
+    # Aggregate results with all 4 mandatory lab categories
     total = len(classifications)
-    quality_counts = {"Normal": 0, "Broken": 0, "Chalky": 0, "Discolored": 0}
+    quality_counts = {
+        "Normal": 0, 
+        "Broken": 0, 
+        "Chalky": 0, 
+        "Discolored": 0
+    }
     type_counts = {"Rice": 0, "Wheat": 0}
     widths, heights = [], []
 
     for c in classifications:
-        quality_counts[c["quality"]] = quality_counts.get(c["quality"], 0) + 1
+        # Safety: use .get() to avoid key errors but we expect these keys
+        q_label = c["quality"]
+        quality_counts[q_label] = quality_counts.get(q_label, 0) + 1
         type_counts[c["grain_type"]] = type_counts.get(c["grain_type"], 0) + 1
         widths.append(c["width"])
         heights.append(c["height"])
@@ -163,23 +175,64 @@ async def upload_image(file: UploadFile = File(...)):
         raise HTTPException(500, f"Analysis failed: {str(e)}")
 
 
+@app.post("/report-batch")
+async def get_batch_pdf_report(results: List[dict]):
+    """Generate and return a consolidated PDF report for a batch of analysis results."""
+    try:
+        report_id = str(uuid.uuid4())[:8]
+        report_path = REPORTS_DIR / f"batch_report_{report_id}.pdf"
+        
+        # Generate the consolidated report
+        generate_batch_pdf_report(str(report_path), results)
+        
+        return FileResponse(
+            path=report_path, 
+            filename=f"GrainScan_Batch_Protocol_{report_id}.pdf",
+            media_type="application/pdf"
+        )
+    except Exception as e:
+        print(f"[Batch Report Error] {str(e)}")
+        raise HTTPException(500, f"Batch report generation failed: {str(e)}")
+
+
 @app.post("/upload-batch")
 async def upload_batch(files: List[UploadFile] = File(...)):
-    """Accept multiple image uploads and analyze each."""
+    """High-stability laboratory batch analysis with mandatory AI metrics."""
+    start_time = time.time()
     results = []
-    for file in files:
-        if not file.content_type.startswith("image/"):
+    
+    print(f"\n[Batch] Starting high-stability analysis of {len(files)} files...")
+    
+    for f in files:
+        if not f.content_type.startswith("image/"):
             continue
-        
-        contents = await file.read()
-        try:
-            result = process_image_bytes(contents, source="batch-upload")
-            result["filename"] = file.filename
-            results.append(result)
-        except Exception as e:
-            results.append({"filename": file.filename, "error": str(e)})
             
-    return JSONResponse(content={"batch_id": str(uuid.uuid4())[:8], "results": results})
+        try:
+            contents = await f.read()
+            # Full AI Brain analysis
+            res = process_image_bytes(contents, source="batch-upload")
+            res["filename"] = f.filename
+            
+            # Strip heavy base64 to ensure 100% stable browser delivery
+            if "annotated_image" in res:
+                del res["annotated_image"]
+                
+            results.append(res)
+            print(f"  -> Success: {f.filename}")
+            
+        except Exception as e:
+            print(f"  -> Failure: {f.filename} ({str(e)})")
+            results.append({
+                "filename": f.filename, 
+                "error": "Scan Failed", 
+                "total_grains": 0,
+                "quality_percentages": {"Normal": 0, "Broken": 0, "Chalky": 0, "Discolored": 0}
+            })
+
+    duration = round(time.time() - start_time, 2)
+    print(f"[Batch] Finished {len(results)} images in {duration}s\n")
+    
+    return {"results": results}
 
 
 @app.post("/scanner-input")
@@ -246,6 +299,36 @@ async def simulate_scan():
     result = process_image_bytes(contents, source="scanner-simulated")
     latest_scan_result = result
     return JSONResponse(content=result)
+
+
+@app.get("/report/{result_id}")
+def get_pdf_report(result_id: str):
+    """Generate and return a professional PDF report for a scan."""
+    # Find the result data
+    res_path = RESULTS_DIR / f"{result_id}.json"
+    if not res_path.exists():
+        # Try to find it in memory if it was just processed
+        global latest_scan_result
+        if latest_scan_result and latest_scan_result.get("id") == result_id:
+            data = latest_scan_result
+        else:
+            raise HTTPException(404, "Analysis data not found")
+    else:
+        data = json.loads(res_path.read_text())
+
+    # Build report
+    report_path = REPORTS_DIR / f"report_{result_id}.pdf"
+    annotated_path = ANNOTATED_DIR / f"{result_id}.jpg"
+    
+    try:
+        generate_pdf_report(str(report_path), data, str(annotated_path))
+        return FileResponse(
+            path=report_path, 
+            filename=f"GrainScan_Protocol_{result_id}.pdf",
+            media_type="application/pdf"
+        )
+    except Exception as e:
+        raise HTTPException(500, f"Report generation failed: {str(e)}")
 
 
 @app.get("/results/{result_id}")
