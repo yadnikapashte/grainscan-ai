@@ -44,6 +44,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [result, setResult] = useState(null)
   const [updating, setUpdating] = useState(false)
+  const [activeFilter, setActiveFilter] = useState('All')
 
   useEffect(() => {
     const raw = sessionStorage.getItem('grain_result')
@@ -370,6 +371,65 @@ export default function DashboardPage() {
                 </ResponsiveContainer>
               </div>
             </div>
+          </div>
+
+          {/* Grain Inspection Gallery */}
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-surface-border pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                  <Microscope size={16} />
+                </div>
+                <h3 className="text-xl font-display text-text-header">High-Definition Grain Gallery</h3>
+              </div>
+              
+              <div className="flex items-center gap-2 p-1 bg-background-soft rounded-xl overflow-x-auto">
+                {['All', 'Normal', 'Broken', 'Chalky', 'Discolored'].map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveFilter(cat)}
+                    className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
+                      activeFilter === cat 
+                        ? 'bg-primary text-white shadow-lg' 
+                        : 'text-text-body/60 hover:bg-white'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 max-h-[600px] overflow-y-auto pr-2 scrollbar-premium">
+              {(activeResult.grains || [])
+                .filter(g => activeFilter === 'All' || g.quality === activeFilter)
+                .map((grain, idx) => (
+                  <div key={idx} className="group relative aspect-square rounded-xl overflow-hidden bg-white border border-surface-border hover:border-primary transition-all cursor-zoom-in">
+                    <div 
+                      className="w-full h-full"
+                      style={{
+                        backgroundImage: `url(${activeResult.original_image || activeResult.annotated_image})`,
+                        backgroundPosition: `${(grain.bbox[0] / (activeResult.img_width - grain.bbox[2])) * 100}% ${(grain.bbox[1] / (activeResult.img_height - grain.bbox[3])) * 100}%`,
+                        backgroundSize: `${(activeResult.img_width / grain.bbox[2]) * 100}% ${(activeResult.img_height / grain.bbox[3]) * 100}%`,
+                        backgroundRepeat: 'no-repeat'
+                      }}
+                    />
+                    <div className={`absolute bottom-0 left-0 right-0 py-0.5 text-[8px] font-black text-center uppercase tracking-tighter text-white ${
+                      grain.quality === 'Normal' ? 'bg-status-normal/80' : 
+                      grain.quality === 'Broken' ? 'bg-status-broken/80' :
+                      'bg-status-discolored/80'
+                    }`}>
+                      {grain.quality}
+                    </div>
+                  </div>
+                ))}
+            </div>
+            {(activeResult.grains || []).length === 0 && (
+              <div className="py-20 text-center opacity-40">
+                <Microscope size={32} className="mx-auto mb-4" />
+                <p className="text-xs font-bold uppercase tracking-widest text-center">No grains mapped in this protocol</p>
+              </div>
+            )}
           </div>
 
           <div className="space-y-6">

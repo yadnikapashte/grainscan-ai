@@ -129,6 +129,10 @@ def process_image_bytes(image_bytes: bytes, source: str = "upload") -> dict:
     # Encode annotated image as base64
     _, buf = cv2.imencode(".jpg", annotated_img)
     annotated_b64 = base64.b64encode(buf.tobytes()).decode()
+    
+    # Encode original image as base64
+    _, original_buffer = cv2.imencode(".jpg", img)
+    original_base64 = base64.b64encode(original_buffer).decode("utf-8")
 
     return {
         "id": result_id,
@@ -145,6 +149,7 @@ def process_image_bytes(image_bytes: bytes, source: str = "upload") -> dict:
         "avg_grain_height_px": avg_height,
         "grains": classifications,
         "annotated_image": f"data:image/jpeg;base64,{annotated_b64}",
+        "original_image": f"data:image/jpeg;base64,{original_base64}",
         "annotated_url": f"/annotated/{result_id}.jpg",
     }
 
