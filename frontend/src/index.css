@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    background-color: #FAFAF7;
+    color: #5C5A54;
+  }
+  
+  html, body {
+    @apply bg-background text-text-body font-body antialiased selection:bg-primary/20 selection:text-primary min-h-screen m-0 p-0;
+    background-color: #FAFAF7 !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display text-text-header font-bold;
+  }
+}
+
+@layer components {
+  .grain-overlay {
+    position: relative;
+    background-color: #FAFAF7;
+  }
+
+
+  .card-premium {
+    @apply bg-surface border border-surface-border rounded-2xl shadow-premium transition-all duration-300 hover:shadow-premium-hover;
+  }
+
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-dark text-white font-semibold py-2.5 px-6 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-sm;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary hover:bg-secondary-dark text-white font-semibold py-2.5 px-6 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-sm;
+  }
+
+  .input-field {
+    @apply w-full bg-white border border-surface-border rounded-xl px-4 py-2.5 text-text-header focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-surface-border rounded-full hover:bg-text-body/20;
+}

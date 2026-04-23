@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "Home",
+    "upload": "Upload",
+    "scanner": "Scanner",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "profile": "Profile",
+    "switch_role": "Switch Role (Dev)"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "save": "Save",
+    "cancel": "Cancel",
+    "verify": "Verify",
+    "flag": "Flag",
+    "verified": "Verified",
+    "flagged": "Flagged",
+    "pending": "Pending",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish"
+  },
+  "dashboard": {
+    "title": "Quality Dashboard",
+    "subtitle": "Laboratory Protocol Capture",
+    "metrics": {
+      "variant": "Grain Variant",
+      "total": "Total Samples",
+      "grade": "Quality Grade"
+    },
+    "charts": {
+      "impurity": "Impurity Breakdown",
+      "quantity": "Quantity Analysis"
+    },
+    "history": {
+      "title": "Lab Protocols",
+      "empty": "Archive Empty"
+    }
+  },
+  "scanner": {
+    "title": "Laboratory Scanner Portal",
+    "subtitle": "Real-time hardware connection",
+    "modes": {
+      "simulation": "Digital Simulation",
+      "live": "Establish Live Feed",
+      "stop": "Stop Live Feed"
+    },
+    "status": {
+      "standby": "System Standby",
+      "processing": "Processing",
+      "live": "Live Capture"
+    }
+  },
+  "upload": {
+    "title": "Laboratory Sample Upload",
+    "subtitle": "Automated quality benchmarking",
+    "dropzone": {
+      "idle": "Drag & Drop Grain Sample",
+      "active": "Drop Sample Now"
+    },
+    "button": "Run Lab Analysis",
+    "specs": "Lab Specifications"
+  }
+}
