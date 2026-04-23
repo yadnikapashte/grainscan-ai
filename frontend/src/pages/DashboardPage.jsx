@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip,
-  ResponsiveContainer, Legend
+  ResponsiveContainer, Legend, AreaChart, Area
 } from 'recharts'
 import {
   BarChart3, ArrowLeft, Download, Wheat, CircleDot,
@@ -202,10 +202,22 @@ export default function DashboardPage() {
             </span>
           </div>
           <h1 className="text-4xl lg:text-5xl font-display text-text-header">{t('dashboard.title')}</h1>
-          <p className="text-text-body mt-2 flex items-center gap-2 text-sm font-medium">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-            {source} Protocol • {new Date(timestamp).toLocaleString()}
-          </p>
+          <div className="flex items-center gap-6 mt-4">
+            <p className="text-text-body flex items-center gap-2 text-sm font-medium">
+              <Calendar size={14} className="text-primary/40" />
+              {new Date(timestamp).toLocaleDateString()}
+            </p>
+            <div className="h-4 w-px bg-surface-border" />
+            <p className="text-text-body flex items-center gap-2 text-sm font-bold">
+              <Wheat size={14} className="text-primary" />
+              {grain_type}
+            </p>
+            <div className="h-4 w-px bg-surface-border" />
+            <p className="text-text-body flex items-center gap-2 text-sm font-bold">
+              <Database size={14} className="text-primary" />
+              {total_grains} Grains
+            </p>
+          </div>
         </div>
         
         <div className="flex flex-wrap items-center gap-3">
@@ -260,18 +272,67 @@ export default function DashboardPage() {
 
       <div className="grid lg:grid-cols-4 gap-8">
         <div className="lg:col-span-3 space-y-8">
-          <div className="grid sm:grid-cols-3 gap-6">
-            <div className="card-premium p-8 relative overflow-hidden group">
-              <p className="text-xs font-bold text-text-body/40 uppercase tracking-widest mb-2">{t('dashboard.metrics.variant')}</p>
-              <h3 className="text-3xl font-display text-text-header">{grain_type}</h3>
+          <div className="grid sm:grid-cols-4 gap-6">
+            <div className="card-premium p-6">
+              <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-4">Purity Analysis</p>
+              <div className="flex items-end justify-between mb-4">
+                <h3 className="text-3xl font-display text-text-header font-bold">{normalPct}%</h3>
+                <div className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tighter ${grade === 'A+' ? 'bg-status-normal text-white' : 'bg-status-broken text-white'}`}>
+                  Grade {grade}
+                </div>
+              </div>
+              <div className="h-10 w-full opacity-60">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={history.slice(0, 6).reverse().map(h => ({ val: (h.raw_data || h).quality_percentages?.Normal || 0 }))}>
+                    <Area type="monotone" dataKey="val" stroke="#2D6A4F" fill="#2D6A4F" fillOpacity={0.1} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
-            <div className="card-premium p-8">
-              <p className="text-xs font-bold text-text-body/40 uppercase tracking-widest mb-2">{t('dashboard.metrics.total')}</p>
-              <h3 className="text-4xl font-display text-text-header font-bold">{total_grains}</h3>
+
+            <div className="card-premium p-6">
+              <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-4">Broken Grains</p>
+              <div className="flex items-end justify-between mb-4">
+                <h3 className="text-3xl font-display text-status-broken font-bold">{quality_percentages.Broken || 0}%</h3>
+                <CircleDot size={16} className="text-status-broken" />
+              </div>
+              <div className="h-10 w-full opacity-60">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={history.slice(0, 6).reverse().map(h => ({ val: (h.raw_data || h).quality_percentages?.Broken || 0 }))}>
+                    <Area type="monotone" dataKey="val" stroke="#D4690A" fill="#D4690A" fillOpacity={0.1} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
-            <div className="card-premium p-8 bg-primary/5 border-primary/20">
-              <p className="text-xs font-bold text-primary/60 uppercase tracking-widest mb-2">{t('dashboard.metrics.grade')}</p>
-              <h3 className="text-4xl font-display text-primary font-bold">{grade}</h3>
+
+            <div className="card-premium p-6">
+              <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-4">Chalky Indices</p>
+              <div className="flex items-end justify-between mb-4">
+                <h3 className="text-3xl font-display text-status-chalky font-bold">{quality_percentages.Chalky || 0}%</h3>
+                <Microscope size={16} className="text-status-chalky" />
+              </div>
+              <div className="h-10 w-full opacity-60">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={history.slice(0, 6).reverse().map(h => ({ val: (h.raw_data || h).quality_percentages?.Chalky || 0 }))}>
+                    <Area type="monotone" dataKey="val" stroke="#B8860B" fill="#B8860B" fillOpacity={0.1} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="card-premium p-6">
+              <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-4">Discoloration</p>
+              <div className="flex items-end justify-between mb-4">
+                <h3 className="text-3xl font-display text-status-discolored font-bold">{quality_percentages.Discolored || 0}%</h3>
+                <AlertTriangle size={16} className="text-status-discolored" />
+              </div>
+              <div className="h-10 w-full opacity-60">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={history.slice(0, 6).reverse().map(h => ({ val: (h.raw_data || h).quality_percentages?.Discolored || 0 }))}>
+                    <Area type="monotone" dataKey="val" stroke="#C0392B" fill="#C0392B" fillOpacity={0.1} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
 
