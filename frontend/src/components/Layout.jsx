@@ -13,7 +13,7 @@ export default function Layout() {
     { to: '/',         label: t('nav.home'),      Icon: Wheat },
     { to: '/upload',   label: t('nav.upload'),    Icon: Upload },
     { to: '/scanner',  label: t('nav.scanner'),   Icon: Scan },
-    { to: '/batch',    label: 'Batch',            Icon: Layers },
+    { to: '/batch',    label: t('nav.batch'),     Icon: Layers },
     { to: '/dashboard',label: t('nav.dashboard'), Icon: BarChart3 },
   ]
 
@@ -184,7 +184,7 @@ export default function Layout() {
       <footer className="border-t border-surface-border py-6 text-center">
         <div className="flex items-center justify-center gap-2 text-xs font-bold text-text-body/40 tracking-widest uppercase mb-1">
           <Wheat size={12} />
-          GrainScan AI — {t('upload.specs')}
+          GrainScan AI — {t('upload.specs.title')}
         </div>
         <p className="text-[10px] text-text-body/30">
           Powered by Advanced Computer Vision • Precision Lab Standards

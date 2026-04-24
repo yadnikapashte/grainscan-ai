@@ -32,10 +32,9 @@ export default function ScannerPage() {
         <div className="w-24 h-24 bg-status-discolored/10 rounded-3xl flex items-center justify-center mx-auto mb-10 text-status-discolored">
           <AlertCircle size={48} />
         </div>
-        <h2 className="text-4xl font-display text-text-header mb-4">Access Restricted</h2>
+        <h2 className="text-4xl font-display text-text-header mb-4">{t('scanner.restricted.title')}</h2>
         <p className="text-text-body text-lg mb-10 max-w-lg mx-auto">
-          Experimental hardware controls are restricted to <b>Laboratory Technicians</b> and <b>Farm Managers</b>. 
-          As an Inspector, your portal is focused on data verification and auditing.
+          {t('scanner.restricted.desc')}
         </p>
         <button onClick={() => nav('/dashboard')} className="btn-primary px-10">
           {t('common.back')} {t('nav.dashboard')}
@@ -185,21 +184,21 @@ export default function ScannerPage() {
           <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-6">
             <Radio size={28} className="animate-pulse" />
           </div>
-          <h3 className="text-2xl font-display text-text-header mb-2 leading-tight">Physical Hardware Setup</h3>
+          <h3 className="text-2xl font-display text-text-header mb-2 leading-tight">{t('scanner.hardware.title')}</h3>
           <p className="text-text-body text-xs mb-4 leading-relaxed">
-            To connect your Epson, HP, or Industrial scanner:
+            {t('scanner.hardware.intro')}
           </p>
           <div className="space-y-3">
             <div className="flex items-start gap-2">
               <div className="w-4 h-4 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold mt-0.5">1</div>
-              <p className="text-[10px] text-text-body/70">Set scanner "Auto-Save" path to the folder below.</p>
+              <p className="text-[10px] text-text-body/70">{t('scanner.hardware.step1')}</p>
             </div>
             <div className="p-3 bg-white border border-surface-border rounded-lg break-all">
               <code className="text-[9px] font-bold text-primary">backend/scans_input/</code>
             </div>
             <div className="flex items-start gap-2">
               <div className="w-4 h-4 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold mt-0.5">2</div>
-              <p className="text-[10px] text-text-body/70">Press the physical <b>Scan</b> button on your hardware.</p>
+              <p className="text-[10px] text-text-body/70">{t('scanner.hardware.step2')}</p>
             </div>
           </div>
         </div>

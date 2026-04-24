@@ -154,13 +154,13 @@ export default function UploadPage() {
 
         <div className="space-y-6">
           <div className="card-premium p-8">
-            <h3 className="text-lg font-display text-text-header mb-4">{t('upload.specs')}</h3>
+            <h3 className="text-lg font-display text-text-header mb-4">{t('upload.specs.title')}</h3>
             <ul className="space-y-4">
               {[
-                { label: 'Lighting', value: 'Diffusion-filtered' },
-                { label: 'Background', value: 'High-contrast White' },
-                { label: 'Spacing', value: 'Decoupled Layering' },
-                { label: 'Resolution', value: 'Min. 300 DPI' }
+                { label: t('upload.specs.lighting'), value: t('upload.specs.lighting_val') },
+                { label: t('upload.specs.bg'), value: t('upload.specs.bg_val') },
+                { label: t('upload.specs.spacing'), value: t('upload.specs.spacing_val') },
+                { label: t('upload.specs.resolution'), value: t('upload.specs.resolution_val') }
               ].map(spec => (
                 <li key={spec.label} className="flex justify-between items-center border-b border-surface-border/50 pb-3">
                   <span className="text-xs font-bold text-text-body/60 uppercase tracking-wider">{spec.label}</span>

@@ -259,7 +259,7 @@ export default function DashboardPage() {
             className="btn-secondary py-3 text-sm flex items-center gap-2"
           >
             <Download size={18} />
-            Export JSON
+            {t('dashboard.export_json')}
           </button>
           
           <button
@@ -267,7 +267,7 @@ export default function DashboardPage() {
             className="btn-primary py-3 text-sm flex items-center gap-2"
           >
             <Download size={18} />
-            Laboratory PDF Report
+            {t('dashboard.lab_report')}
           </button>
         </div>
       </div>
@@ -276,11 +276,11 @@ export default function DashboardPage() {
         <div className="lg:col-span-3 space-y-8">
           <div className="grid sm:grid-cols-4 gap-6">
             <div className="card-premium p-6">
-              <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-4">Purity Analysis</p>
+              <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-4">{t('dashboard.charts.purity')}</p>
               <div className="flex items-end justify-between mb-4">
                 <h3 className="text-3xl font-display text-text-header font-bold">{normalPct}%</h3>
                 <div className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tighter ${grade === 'A+' ? 'bg-status-normal text-white' : 'bg-status-broken text-white'}`}>
-                  Grade {grade}
+                  {t('dashboard.grade_label')} {grade}
                 </div>
               </div>
               <div className="h-10 w-full opacity-60">
@@ -293,7 +293,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="card-premium p-6">
-              <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-4">Broken Grains</p>
+              <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-4">{t('dashboard.charts.broken')}</p>
               <div className="flex items-end justify-between mb-4">
                 <h3 className="text-3xl font-display text-status-broken font-bold">{quality_percentages.Broken || 0}%</h3>
                 <CircleDot size={16} className="text-status-broken" />
@@ -308,7 +308,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="card-premium p-6">
-              <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-4">Chalky Indices</p>
+              <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-4">{t('dashboard.charts.chalky')}</p>
               <div className="flex items-end justify-between mb-4">
                 <h3 className="text-3xl font-display text-status-chalky font-bold">{quality_percentages.Chalky || 0}%</h3>
                 <Microscope size={16} className="text-status-chalky" />
@@ -323,7 +323,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="card-premium p-6">
-              <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-4">Discoloration</p>
+              <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-4">{t('dashboard.charts.discolored')}</p>
               <div className="flex items-end justify-between mb-4">
                 <h3 className="text-3xl font-display text-status-discolored font-bold">{quality_percentages.Discolored || 0}%</h3>
                 <AlertTriangle size={16} className="text-status-discolored" />
@@ -381,7 +381,7 @@ export default function DashboardPage() {
                 <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                   <Microscope size={16} />
                 </div>
-                <h3 className="text-xl font-display text-text-header">High-Definition Grain Gallery</h3>
+                <h3 className="text-xl font-display text-text-header">{t('dashboard.gallery.title')}</h3>
               </div>
               
               <div className="flex items-center gap-2 p-1 bg-background-soft rounded-xl overflow-x-auto">
@@ -395,7 +395,7 @@ export default function DashboardPage() {
                         : 'text-text-body/60 hover:bg-white'
                     }`}
                   >
-                    {cat}
+                    {t(`quality.${cat.toLowerCase()}`)}
                   </button>
                 ))}
               </div>
@@ -424,7 +424,7 @@ export default function DashboardPage() {
                       grain.quality === 'Broken' ? 'bg-status-broken/70' :
                       'bg-status-discolored/70'
                     }`}>
-                      {grain.quality}
+                      {t(`quality.${grain.quality.toLowerCase()}`)}
                     </div>
                   </div>
                 ))}
@@ -432,7 +432,7 @@ export default function DashboardPage() {
             {(activeResult.grains || []).length === 0 && (
               <div className="py-20 text-center opacity-40">
                 <Microscope size={32} className="mx-auto mb-4" />
-                <p className="text-xs font-bold uppercase tracking-widest text-center">No grains mapped in this protocol</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-center">{t('dashboard.gallery.no_grains')}</p>
               </div>
             )}
           </div>
@@ -454,8 +454,8 @@ export default function DashboardPage() {
                     'bg-status-discolored'
                   }`} />
                   <div>
-                    <h3 className="text-2xl font-display text-text-header">High-Definition Inspection</h3>
-                    <p className="text-xs font-bold uppercase tracking-widest text-primary">Sample: {activeResult.grain_type} — {selectedGrain.quality}</p>
+                    <h3 className="text-2xl font-display text-text-header">{t('dashboard.gallery.hd_inspection')}</h3>
+                    <p className="text-xs font-bold uppercase tracking-widest text-primary">{t('dashboard.gallery.sample')}: {activeResult.grain_type} — {t(`quality.${selectedGrain.quality.toLowerCase()}`)}</p>
                   </div>
                 </div>
 
@@ -473,17 +473,17 @@ export default function DashboardPage() {
 
                 <div className="grid grid-cols-2 gap-4 pt-4 border-t border-surface-border">
                   <div className="p-4 bg-background-soft rounded-2xl">
-                    <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-1">Dimensions</p>
+                    <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-1">{t('stats.dimensions')}</p>
                     <p className="text-lg font-display text-text-header">{selectedGrain.width}px × {selectedGrain.height}px</p>
                   </div>
                   <div className="p-4 bg-background-soft rounded-2xl">
-                    <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-1">Confidence Score</p>
+                    <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-1">{t('stats.confidence')}</p>
                     <p className="text-lg font-display text-text-header">{(selectedGrain.confidence * 100).toFixed(1)}%</p>
                   </div>
                 </div>
 
                 <div className="text-center">
-                  <button onClick={() => setSelectedGrain(null)} className="btn-primary px-10 py-3">Close Inspection</button>
+                  <button onClick={() => setSelectedGrain(null)} className="btn-primary px-10 py-3">{t('dashboard.gallery.close')}</button>
                 </div>
               </div>
             </div>
@@ -494,7 +494,7 @@ export default function DashboardPage() {
               <div className="w-8 h-8 rounded-lg bg-status-discolored/10 flex items-center justify-center text-status-discolored">
                 <TrendingUp size={16} />
               </div>
-              <h3 className="text-xl font-display text-text-header">Spatial Defect Analytics</h3>
+              <h3 className="text-xl font-display text-text-header">{t('dashboard.spatial')}</h3>
             </div>
             <DefectHeatmap 
               grains={activeResult.grains || []} 

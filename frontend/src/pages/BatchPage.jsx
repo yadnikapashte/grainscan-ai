@@ -81,25 +81,25 @@ export default function BatchPage() {
         <div>
           <div className="inline-flex items-center gap-2 mb-4">
             <Layers size={14} className="text-primary" />
-            <span className="text-xs font-bold uppercase tracking-widest text-text-body/40">Laboratory Mode</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-text-body/40">{t('batch.mode')}</span>
           </div>
-          <h1 className="text-4xl lg:text-5xl font-display text-text-header">Batch Processing</h1>
+          <h1 className="text-4xl lg:text-5xl font-display text-text-header">{t('batch.title')}</h1>
           <p className="text-text-body mt-2 flex items-center gap-2 text-sm font-medium">
-            Analyze multiple samples simultaneously and export consolidated protocols.
+            {t('batch.subtitle')}
           </p>
         </div>
 
           <div className="flex items-center gap-3">
             <button onClick={exportCSV} className="btn-secondary py-3 px-8 flex items-center gap-2">
               <Download size={18} />
-              Download CSV
+              {t('batch.download_csv')}
             </button>
             <button 
               onClick={() => grainApi.downloadBatchReport(results)} 
               className="btn-primary py-3 px-8 flex items-center gap-2"
             >
               <Download size={18} />
-              Download Batch PDF
+              {t('batch.download_pdf')}
             </button>
           </div>
         )}
@@ -121,10 +121,10 @@ export default function BatchPage() {
                 <Upload size={32} />
               </div>
               <p className="text-lg font-display text-text-header font-bold mb-2">
-                Drop multiple grain images here
+                {t('batch.dropzone.idle')}
               </p>
               <p className="text-text-body/60 text-sm">
-                Up to 50 images for simultaneous analysis
+                {t('batch.dropzone.sub')}
               </p>
             </div>
 
@@ -132,14 +132,14 @@ export default function BatchPage() {
               <div className="card-premium p-8 animate-slide-up">
                 <div className="flex items-center justify-between mb-8 pb-4 border-b border-surface-border">
                   <h3 className="font-display text-lg text-text-header flex items-center gap-3">
-                    Selected Samples
+                    {t('batch.selected')}
                     <span className="bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded-full">{files.length}</span>
                   </h3>
                   <button 
                     onClick={() => setFiles([])}
                     className="text-text-body/40 hover:text-status-discolored text-xs font-bold uppercase transition-all"
                   >
-                    Clear All
+                    {t('batch.clear')}
                   </button>
                 </div>
 
@@ -173,13 +173,13 @@ export default function BatchPage() {
                       <>
                         <div className="flex items-center gap-3">
                           <Loader2 className="animate-spin" size={18} />
-                          <span>AI High-Stability Scan...</span>
+                          <span>{t('batch.processing')}</span>
                         </div>
-                        <span className="text-[10px] opacity-60 font-bold uppercase tracking-widest text-center">Processing samples sequentially for maximum accuracy</span>
+                        <span className="text-[10px] opacity-60 font-bold uppercase tracking-widest text-center">{t('batch.processing_sub')}</span>
                       </>
                     ) : (
                       <div className="flex items-center gap-3">
-                        <span>Analyze All Samples</span>
+                        <span>{t('batch.button')}</span>
                         <ArrowRight size={18} />
                       </div>
                     )}
@@ -192,7 +192,7 @@ export default function BatchPage() {
           {/* Guidelines Right */}
           <div className="lg:col-span-1 space-y-6 opacity-60">
             <div className="card-premium p-8 bg-background-soft/50">
-              <h3 className="font-display text-sm text-text-header uppercase tracking-widest mb-6">Batch Protocols</h3>
+              <h3 className="font-display text-sm text-text-header uppercase tracking-widest mb-6">{t('batch.guidelines')}</h3>
               <ul className="space-y-4">
                 {[
                   'Ensure consistent lighting across all files',
@@ -222,14 +222,14 @@ export default function BatchPage() {
               <table className="w-full text-left">
                 <thead>
                   <tr className="bg-background-soft border-b border-surface-border">
-                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-text-body/40">Sample ID</th>
-                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-text-body/40">Grain Type</th>
-                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-text-body/40">Total Count</th>
-                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-status-normal font-bold">Normal%</th>
-                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-status-discolored font-bold">Broken%</th>
-                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-status-chalky font-bold">Chalky%</th>
-                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-status-discolored opacity-70 font-bold tracking-tighter">Discolor%</th>
-                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-text-body/40">Status</th>
+                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-text-body/40">{t('batch.table.id')}</th>
+                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-text-body/40">{t('batch.table.type')}</th>
+                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-text-body/40">{t('batch.table.count')}</th>
+                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-status-normal font-bold">{t('batch.table.normal')}</th>
+                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-status-discolored font-bold">{t('batch.table.broken')}</th>
+                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-status-chalky font-bold">{t('batch.table.chalky')}</th>
+                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-status-discolored opacity-70 font-bold tracking-tighter">{t('batch.table.discolor')}</th>
+                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-text-body/40">{t('batch.table.status')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-border">
@@ -259,9 +259,9 @@ export default function BatchPage() {
                       </td>
                       <td className="px-6 py-5">
                         {r.error ? (
-                          <span className="px-2 py-1 bg-status-discolored/10 text-status-discolored rounded text-[10px] font-bold uppercase">Failed</span>
+                          <span className="px-2 py-1 bg-status-discolored/10 text-status-discolored rounded text-[10px] font-bold uppercase">{t('batch.status.failed')}</span>
                         ) : (
-                          <span className="px-2 py-1 bg-status-normal/10 text-status-normal rounded text-[10px] font-bold uppercase tracking-tight">Analyzed</span>
+                          <span className="px-2 py-1 bg-status-normal/10 text-status-normal rounded text-[10px] font-bold uppercase tracking-tight">{t('batch.status.analyzed')}</span>
                         )}
                       </td>
                     </tr>
@@ -279,7 +279,7 @@ export default function BatchPage() {
               }}
               className="btn-secondary py-3 px-8 text-sm"
             >
-              Start New Batch Analysis
+              {t('batch.new')}
             </button>
           </div>
         </div>

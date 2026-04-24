@@ -3,6 +3,7 @@
     "home": "Home",
     "upload": "Upload",
     "scanner": "Scanner",
+    "batch": "Batch",
     "dashboard": "Dashboard",
     "logout": "Logout",
     "profile": "Profile",
@@ -22,6 +23,17 @@
     "next": "Next",
     "finish": "Finish"
   },
+  "quality": {
+    "all": "All",
+    "normal": "Normal",
+    "broken": "Broken",
+    "chalky": "Chalky",
+    "discolored": "Discolored"
+  },
+  "stats": {
+    "dimensions": "Dimensions",
+    "confidence": "Confidence Score"
+  },
   "dashboard": {
     "title": "Quality Dashboard",
     "subtitle": "Laboratory Protocol Capture",
@@ -32,12 +44,27 @@
     },
     "charts": {
       "impurity": "Impurity Breakdown",
-      "quantity": "Quantity Analysis"
+      "quantity": "Quantity Analysis",
+      "purity": "Purity Analysis",
+      "broken": "Broken Grains",
+      "chalky": "Chalky Grains",
+      "discolored": "Discolored Grains"
     },
     "history": {
       "title": "Lab Protocols",
       "empty": "Archive Empty"
-    }
+    },
+    "gallery": {
+      "title": "High-Definition Grain Gallery",
+      "hd_inspection": "High-Definition Inspection",
+      "sample": "Sample",
+      "close": "Close Inspection",
+      "no_grains": "No grains mapped in this protocol"
+    },
+    "spatial": "Spatial Defect Analytics",
+    "export_json": "Export JSON",
+    "lab_report": "Laboratory PDF Report",
+    "grade_label": "Grade"
   },
   "scanner": {
     "title": "Laboratory Scanner Portal",
@@ -51,6 +78,16 @@
       "standby": "System Standby",
       "processing": "Processing",
       "live": "Live Capture"
+    },
+    "hardware": {
+      "title": "Physical Hardware Setup",
+      "intro": "To connect your Epson, HP, or Industrial scanner:",
+      "step1": "Set scanner \"Auto-Save\" path to the folder below.",
+      "step2": "Press the physical Scan button on your hardware."
+    },
+    "restricted": {
+      "title": "Access Restricted",
+      "desc": "Experimental hardware controls are restricted to Laboratory Technicians and Farm Managers. As an Inspector, your portal is focused on data verification and auditing."
     }
   },
   "upload": {
@@ -61,6 +98,87 @@
       "active": "Drop Sample Now"
     },
     "button": "Run Lab Analysis",
-    "specs": "Lab Specifications"
+    "specs": {
+      "title": "Lab Specifications",
+      "lighting": "Lighting",
+      "lighting_val": "Diffusion-filtered",
+      "bg": "Background",
+      "bg_val": "High-contrast White",
+      "spacing": "Spacing",
+      "spacing_val": "Decoupled Layering",
+      "resolution": "Resolution",
+      "resolution_val": "Min. 300 DPI"
+    }
+  },
+  "batch": {
+    "title": "Batch Processing",
+    "subtitle": "Analyze multiple samples simultaneously and export consolidated protocols.",
+    "mode": "Laboratory Mode",
+    "download_csv": "Download CSV",
+    "download_pdf": "Download Batch PDF",
+    "dropzone": {
+      "idle": "Drop multiple grain images here",
+      "sub": "Up to 50 images for simultaneous analysis"
+    },
+    "selected": "Selected Samples",
+    "clear": "Clear All",
+    "button": "Analyze All Samples",
+    "processing": "AI High-Stability Scan...",
+    "processing_sub": "Processing samples sequentially for maximum accuracy",
+    "guidelines": "Batch Protocols",
+    "table": {
+      "id": "Sample ID",
+      "type": "Grain Type",
+      "count": "Total Count",
+      "normal": "Normal%",
+      "broken": "Broken%",
+      "chalky": "Chalky%",
+      "discolor": "Discolor%",
+      "status": "Status"
+    },
+    "status": {
+      "analyzed": "Analyzed",
+      "failed": "Failed"
+    },
+    "new": "Start New Batch Analysis"
+  },
+  "home": {
+    "cert": "Certified Quality Protocol",
+    "title": "Precision Grain Analysis for Modern Labs",
+    "subtitle": "The most advanced AI system for grading rice and wheat. Instant segmentation, defect detection, and quality scoring at lab-grade precision.",
+    "cta_start": "Start New Analysis",
+    "cta_scanner": "Scanner Mode",
+    "features_title": "Optimized for Agricultural Precision",
+    "features_sub": "Built from the ground up to meet professional laboratory and export standards.",
+    "feature1": {
+      "title": "Expert Segmentation",
+      "desc": "Deep learning models trained on millions of kernels to identify even overlapping grains with 99.8% precision."
+    },
+    "feature2": {
+      "title": "Defect Identification",
+      "desc": "Instantly detect broken, chalky, or discolored grains that affect the core quality and export value."
+    },
+    "feature3": {
+      "title": "Secure Reporting",
+      "desc": "All analysis results are backed up to our secure vault, allowing for historical trends and audit trails."
+    },
+    "stats": {
+      "scans_val": "15,000+",
+      "scans": "Daily Scans",
+      "varieties_val": "500+",
+      "varieties": "Grain Varieties",
+      "median_val": "2.4s",
+      "median": "Median Analysis",
+      "accuracy_val": "99.8%",
+      "accuracy": "Accuracy"
+    },
+    "scale_title": "Scale your quality control with zero compromises",
+    "scale_points": [
+      "Eliminate subjective human grading errors",
+      "Reduce inspection costs by up to 85%",
+      "Export-ready documentation for every batch",
+      "Automated trend monitoring for farm yield"
+    ],
+    "register": "Register your laboratory profile"
   }
 }
