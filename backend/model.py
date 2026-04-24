@@ -21,7 +21,10 @@ class GrainClassifier:
     Development/Demo: uses computer-vision heuristics.
     """
 
-    MODEL_PATH = os.environ.get("GRAIN_MODEL_PATH", "model.pth")
+    MODEL_PATH = os.environ.get(
+        "GRAIN_MODEL_PATH", 
+        "../ML_Pipeline/codebase/outputs/models/rice_resnet50.pth"
+    )
 
     def __init__(self):
         self.model = None
@@ -39,11 +42,13 @@ class GrainClassifier:
                 print(f"[Model] No model at {self.MODEL_PATH}. Using CV heuristics.")
                 return
 
-            # Build MobileNetV2 with 8 output classes
-            # (4 quality × 2 grain types = 8 classes)
-            model = models.mobilenet_v2(pretrained=False)
-            model.classifier[1] = torch.nn.Linear(
-                model.last_channel, 8
+            # Build ResNet50 with 4 output classes
+            # (Broken, Chalky, Discolored, Normal)
+            model = models.resnet50(pretrained=False)
+            in_features = model.fc.in_features
+            model.fc = torch.nn.Sequential(
+                torch.nn.Dropout(p=0.3),
+                torch.nn.Linear(in_features, 4),
             )
 
             state = torch.load(self.MODEL_PATH, map_location="cpu")
@@ -60,18 +65,15 @@ class GrainClassifier:
             ])
 
             # Class index → (grain_type, quality)
+            # Based on alphabetical order of Dataset folders: Broken, Chalky, Discolored, Normal
             self.idx_to_label = {
-                0: ("Rice",  "Normal"),
-                1: ("Rice",  "Broken"),
-                2: ("Rice",  "Chalky"),
-                3: ("Rice",  "Discolored"),
-                4: ("Wheat", "Normal"),
-                5: ("Wheat", "Broken"),
-                6: ("Wheat", "Chalky"),
-                7: ("Wheat", "Discolored"),
+                0: ("Rice",  "Broken"),
+                1: ("Rice",  "Chalky"),
+                2: ("Rice",  "Discolored"),
+                3: ("Rice",  "Normal"),
             }
 
-            print("[Model] PyTorch model loaded successfully.")
+            print(f"[Model] Real ResNet50 model loaded from {self.MODEL_PATH}")
         except ImportError:
             print("[Model] PyTorch not installed. Using CV heuristics.")
         except Exception as e:

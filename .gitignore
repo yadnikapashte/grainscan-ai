@@ -163,6 +163,7 @@ backend/uploads/
 backend/scanner_watch/
 backend/annotated/
 backend/results/
+backend/reports/
 backend/*.pth
 
 # ML Pipeline Exclusions

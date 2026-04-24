@@ -121,7 +121,7 @@ def process_image_bytes(image_bytes: bytes, source: str = "upload") -> dict:
     avg_height = round(np.mean(heights), 1) if heights else 0
 
     # Generate annotated image
-    result_id = str(uuid.uuid4())[:8]
+    result_id = str(uuid.uuid4())
     annotated_path = str(ANNOTATED_DIR / f"{result_id}.jpg")
     annotated_img = processor.draw_annotations(img, segments, classifications)
     cv2.imwrite(annotated_path, annotated_img)
@@ -134,7 +134,8 @@ def process_image_bytes(image_bytes: bytes, source: str = "upload") -> dict:
     _, original_buffer = cv2.imencode(".jpg", img)
     original_base64 = base64.b64encode(original_buffer).decode("utf-8")
 
-    return {
+    # Save result to disk for persistence and reporting
+    res_data = {
         "id": result_id,
         "source": source,
         "timestamp": datetime.utcnow().isoformat(),
@@ -148,9 +149,16 @@ def process_image_bytes(image_bytes: bytes, source: str = "upload") -> dict:
         "avg_grain_width_px": avg_width,
         "avg_grain_height_px": avg_height,
         "grains": classifications,
+        "annotated_url": f"/annotated/{result_id}.jpg",
+    }
+    
+    with open(RESULTS_DIR / f"{result_id}.json", "w") as f:
+        json.dump(res_data, f)
+
+    return {
+        **res_data,
         "annotated_image": f"data:image/jpeg;base64,{annotated_b64}",
         "original_image": f"data:image/jpeg;base64,{original_base64}",
-        "annotated_url": f"/annotated/{result_id}.jpg",
     }
 
 
@@ -304,6 +312,30 @@ async def simulate_scan():
     result = process_image_bytes(contents, source="scanner-simulated")
     latest_scan_result = result
     return JSONResponse(content=result)
+
+
+@app.post("/report")
+async def generate_report_from_data(result: dict):
+    """Generate a professional PDF report from provided analysis data."""
+    try:
+        report_id = result.get("id", "temp")
+        report_filename = f"GrainScan_Report_{report_id}.pdf"
+        report_path = REPORTS_DIR / report_filename
+        
+        # We still need the annotated image if possible. 
+        # If not provided in disk, the report will just skip the image.
+        annotated_path = ANNOTATED_DIR / f"{report_id}.jpg"
+        
+        from reports import generate_pdf_report
+        generate_pdf_report(str(report_path), result, str(annotated_path))
+        
+        return FileResponse(
+            path=report_path,
+            filename=report_filename,
+            media_type="application/pdf"
+        )
+    except Exception as e:
+        raise HTTPException(500, f"Report generation failed: {str(e)}")
 
 
 @app.get("/report/{result_id}")

@@ -262,7 +262,7 @@ export default function DashboardPage() {
           </button>
           
           <button
-            onClick={() => grainApi.downloadReport(activeResult.id)}
+            onClick={() => grainApi.downloadReport(activeResult)}
             className="btn-primary py-3 text-sm flex items-center gap-2"
           >
             <Download size={18} />
@@ -443,7 +443,7 @@ export default function DashboardPage() {
               grains={activeResult.grains || []} 
               imgWidth={activeResult.img_width || 800} 
               imgHeight={activeResult.img_height || 600} 
-              imageUrl={activeResult.annotated_image}
+              imageUrl={activeResult.original_image}
               className="h-[460px]"
             />
           </div>

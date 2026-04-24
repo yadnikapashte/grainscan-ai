@@ -56,8 +56,22 @@ export const grainApi = {
   },
 
   /** Download a PDF report for a scan */
-  downloadReport: (resultId) => {
-    window.open(`${BASE}/report/${resultId}`, '_blank')
+  downloadReport: async (resultData) => {
+    try {
+      const response = await api.post('/report', resultData, {
+        responseType: 'blob'
+      })
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `GrainScan_Report_${resultData.id || 'export'}.pdf`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+    } catch (err) {
+      console.error('PDF generation failed:', err)
+      alert('Could not generate PDF report. Please try again.')
+    }
   },
 
   /** Download a consolidated PDF report for a batch */

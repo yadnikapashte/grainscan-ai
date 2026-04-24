@@ -20,40 +20,43 @@ export default function DefectHeatmap({ grains, imgWidth, imgHeight, imageUrl, c
       // Clear and draw background
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Draw background image with low opacity (30%)
-      ctx.globalAlpha = 0.3;
+      // Draw background image with high opacity (75%) for better clarity
+      ctx.globalAlpha = 0.75;
       ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
       ctx.globalAlpha = 1.0;
 
-      // Filter for defects
-      const defects = grains.filter(g => g.quality !== 'Normal');
-      if (defects.length === 0) return;
+      // Filter for grains to display (showing all classes)
+      const displayGrains = grains;
+      if (displayGrains.length === 0) return;
 
       // Quality to Heat Color Map
       const HEAT_COLORS = {
+        Normal: '#2D6A4F',
         Broken: '#D00000',
         Chalky: '#3AB7BF',
         Discolored: '#FFB800'
       };
 
       // Draw heat blobs
-      defects.forEach(defect => {
+      displayGrains.forEach(defect => {
         const [x, y, w, h] = defect.bbox;
         const centerX = (x + w / 2) * (canvas.width / imgWidth);
         const centerY = (y + h / 2) * (canvas.height / imgHeight);
         const color = HEAT_COLORS[defect.quality] || '#E9840A';
 
-        // Create a radial gradient for a "hot" look
-        const radius = Math.min(canvas.width, canvas.height) / 8;
+        // Create a radial gradient for a "hot" look with higher intensity and larger radius
+        const radius = Math.min(canvas.width, canvas.height) / 7;
         const gradient = ctx.createRadialGradient(centerX, centerY, 2, centerX, centerY, radius);
         gradient.addColorStop(0, color);
-        gradient.addColorStop(0.5, `${color}44`); // 44 is hex alpha
+        gradient.addColorStop(0.4, `${color}88`); // 88 is ~50% alpha (increased from 44)
         gradient.addColorStop(1, 'transparent');
 
+        ctx.globalCompositeOperation = 'screen'; // additive glow effect
         ctx.fillStyle = gradient;
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
         ctx.fill();
+        ctx.globalCompositeOperation = 'source-over'; // restore default
 
         // Add a small core point
         ctx.fillStyle = color;
@@ -87,28 +90,36 @@ export default function DefectHeatmap({ grains, imgWidth, imgHeight, imageUrl, c
       
       {/* Legend & Labels */}
       <div className="absolute top-6 left-6 block">
-        <div className="bg-black/80 backdrop-blur-xl px-4 py-2 rounded-2xl border border-white/10 flex items-center gap-3">
+        <div className="bg-black/80 backdrop-blur-xl px-4 py-2 rounded-2xl border border-white/20 flex items-center gap-3 shadow-2xl">
           <div className="flex -space-x-1">
-            <div className="w-2 h-2 rounded-full bg-status-discolored"></div>
-            <div className="w-2 h-2 rounded-full bg-status-chalky"></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-status-discolored shadow-[0_0_8px_rgba(255,184,0,0.6)]"></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-status-chalky shadow-[0_0_8px_rgba(58,183,191,0.6)]"></div>
           </div>
-          <p className="text-[10px] font-bold text-white uppercase tracking-widest">
+          <p className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
             Spatial Distribution Map
           </p>
         </div>
       </div>
 
-      <div className="absolute bottom-6 right-6 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10">
-        <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#D00000]"></div>
-                <span className="text-[9px] font-bold text-text-header/60 uppercase">Broken Heat</span>
+      <div className="absolute bottom-6 right-6 p-5 bg-black/60 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+        <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-3">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#2D6A4F] shadow-[0_0_10px_rgba(45,106,79,0.8)]"></div>
+                <span className="text-[10px] font-black text-white/90 uppercase tracking-widest">Normal Distribution</span>
             </div>
-            <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#3AB7BF]"></div>
-                <span className="text-[9px] font-bold text-text-header/60 uppercase">Chalky Heat</span>
+            <div className="flex items-center gap-3">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#D00000] shadow-[0_0_10px_rgba(208,0,0,0.8)]"></div>
+                <span className="text-[10px] font-black text-white/90 uppercase tracking-widest">Broken Heat</span>
             </div>
-            <div className="w-24 h-1 rounded-full bg-gradient-to-r from-transparent to-primary mt-1" />
+            <div className="flex items-center gap-3">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#3AB7BF] shadow-[0_0_10px_rgba(58,183,191,0.8)]"></div>
+                <span className="text-[10px] font-black text-white/90 uppercase tracking-widest">Chalky Heat</span>
+            </div>
+            <div className="flex items-center gap-3">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#FFB800] shadow-[0_0_10px_rgba(255,184,0,0.8)]"></div>
+                <span className="text-[10px] font-black text-white/90 uppercase tracking-widest">Discolored Heat</span>
+            </div>
+            <div className="w-full h-1 rounded-full bg-gradient-to-r from-transparent via-primary/40 to-primary/80 mt-1" />
         </div>
       </div>
     </div>
