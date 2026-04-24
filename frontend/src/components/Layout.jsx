@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
-import { Wheat, Upload, Scan, BarChart3, LogOut, Languages, Globe, Layers } from 'lucide-react'
+import { Wheat, Upload, Scan, BarChart3, LogOut, Languages, Globe, Layers, History } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import { useTranslation } from 'react-i18next'
@@ -14,6 +14,7 @@ export default function Layout() {
     { to: '/upload',   label: t('nav.upload'),    Icon: Upload },
     { to: '/scanner',  label: t('nav.scanner'),   Icon: Scan },
     { to: '/batch',    label: t('nav.batch'),     Icon: Layers },
+    { to: '/history',  label: t('nav.history'),   Icon: History },
     { to: '/dashboard',label: t('nav.dashboard'), Icon: BarChart3 },
   ]
 

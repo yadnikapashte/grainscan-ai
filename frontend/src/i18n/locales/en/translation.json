@@ -4,6 +4,7 @@
     "upload": "Upload",
     "scanner": "Scanner",
     "batch": "Batch",
+    "history": "History",
     "dashboard": "Dashboard",
     "logout": "Logout",
     "profile": "Profile",
@@ -65,6 +66,25 @@
     "export_json": "Export JSON",
     "lab_report": "Laboratory PDF Report",
     "grade_label": "Grade"
+  },
+  "history": {
+    "title": "Protocol Archive",
+    "subtitle": "Complete historical log of all laboratory scans and automated grading results.",
+    "table": {
+      "date": "Analysis Date",
+      "type": "Grain Type",
+      "samples": "Total Samples",
+      "purity": "Purity (Normal%)",
+      "status": "Status",
+      "actions": "Actions",
+      "view": "View Details"
+    },
+    "filter": {
+      "all": "All Records",
+      "technician": "My Scans",
+      "inspector": "All Laboratory Records"
+    },
+    "empty": "No historical data found. Start a new scan to populate the archive."
   },
   "scanner": {
     "title": "Laboratory Scanner Portal",

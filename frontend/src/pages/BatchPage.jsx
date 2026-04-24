@@ -5,9 +5,12 @@ import {
   Loader2, Download, Trash2, ArrowRight
 } from 'lucide-react'
 import { grainApi, BASE_URL } from '../services/api'
+import { supabase } from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
 import { useTranslation } from 'react-i18next'
 
 export default function BatchPage() {
+  const { user } = useAuth()
   const { t } = useTranslation()
   const [files, setFiles] = useState([])
   const [processing, setProcessing] = useState(false)
@@ -37,6 +40,25 @@ export default function BatchPage() {
       console.log('Results received:', data)
       if (data && data.results) {
         setResults(data.results)
+        
+        // Save each success result to Supabase
+        if (user) {
+          const toSafe = data.results.filter(r => !r.error).map(r => ({
+            user_id: user.id,
+            grain_type: r.grain_type,
+            total_grains: r.total_grains,
+            quality_counts: r.quality_counts,
+            quality_percentages: r.quality_percentages,
+            source: 'Batch',
+            timestamp: new Date().toISOString(),
+            annotated_image_url: r.annotated_url, 
+            raw_data: r
+          }))
+          
+          if (toSafe.length > 0) {
+            await supabase.from('scan_results').insert(toSafe)
+          }
+        }
       } else {
         throw new Error('Invalid server response format')
       }
@@ -88,7 +110,7 @@ export default function BatchPage() {
             {t('batch.subtitle')}
           </p>
         </div>
-
+        {results && (
           <div className="flex items-center gap-3">
             <button onClick={exportCSV} className="btn-secondary py-3 px-8 flex items-center gap-2">
               <Download size={18} />
