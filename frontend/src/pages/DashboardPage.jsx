@@ -45,6 +45,7 @@ export default function DashboardPage() {
   const [result, setResult] = useState(null)
   const [updating, setUpdating] = useState(false)
   const [activeFilter, setActiveFilter] = useState('All')
+  const [selectedGrain, setSelectedGrain] = useState(null)
 
   useEffect(() => {
     const raw = sessionStorage.getItem('grain_result')
@@ -400,13 +401,17 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 max-h-[600px] overflow-y-auto pr-2 scrollbar-premium">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4 max-h-[600px] overflow-y-auto pr-2 scrollbar-premium">
               {(activeResult.grains || [])
                 .filter(g => activeFilter === 'All' || g.quality === activeFilter)
                 .map((grain, idx) => (
-                  <div key={idx} className="group relative aspect-square rounded-xl overflow-hidden bg-white border border-surface-border hover:border-primary transition-all cursor-zoom-in">
+                  <div 
+                    key={idx} 
+                    onClick={() => setSelectedGrain(grain)}
+                    className="group relative aspect-square rounded-2xl overflow-hidden bg-white border border-surface-border hover:border-primary shadow-sm hover:shadow-xl transition-all cursor-zoom-in"
+                  >
                     <div 
-                      className="w-full h-full"
+                      className="w-full h-full transform group-hover:scale-110 transition-transform duration-500"
                       style={{
                         backgroundImage: `url(${activeResult.original_image || activeResult.annotated_image})`,
                         backgroundPosition: `${(grain.bbox[0] / (activeResult.img_width - grain.bbox[2])) * 100}% ${(grain.bbox[1] / (activeResult.img_height - grain.bbox[3])) * 100}%`,
@@ -414,10 +419,10 @@ export default function DashboardPage() {
                         backgroundRepeat: 'no-repeat'
                       }}
                     />
-                    <div className={`absolute bottom-0 left-0 right-0 py-0.5 text-[8px] font-black text-center uppercase tracking-tighter text-white ${
-                      grain.quality === 'Normal' ? 'bg-status-normal/80' : 
-                      grain.quality === 'Broken' ? 'bg-status-broken/80' :
-                      'bg-status-discolored/80'
+                    <div className={`absolute bottom-0 left-0 right-0 py-1 text-[10px] font-black text-center uppercase tracking-tighter text-white backdrop-blur-md ${
+                      grain.quality === 'Normal' ? 'bg-status-normal/70' : 
+                      grain.quality === 'Broken' ? 'bg-status-broken/70' :
+                      'bg-status-discolored/70'
                     }`}>
                       {grain.quality}
                     </div>
@@ -431,6 +436,58 @@ export default function DashboardPage() {
               </div>
             )}
           </div>
+
+          {/* High-Definition Inspection Modal */}
+          {selectedGrain && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in" onClick={() => setSelectedGrain(null)}>
+              <div className="card-premium max-w-2xl w-full p-8 space-y-6 relative overflow-hidden" onClick={e => e.stopPropagation()}>
+                <div className="absolute top-0 right-0 p-4">
+                  <button onClick={() => setSelectedGrain(null)} className="p-2 rounded-full bg-background-soft hover:bg-surface-border transition-all">
+                    <X size={24} className="text-text-header" />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-4 mb-4">
+                  <div className={`w-3 h-10 rounded-full ${
+                    selectedGrain.quality === 'Normal' ? 'bg-status-normal' : 
+                    selectedGrain.quality === 'Broken' ? 'bg-status-broken' :
+                    'bg-status-discolored'
+                  }`} />
+                  <div>
+                    <h3 className="text-2xl font-display text-text-header">High-Definition Inspection</h3>
+                    <p className="text-xs font-bold uppercase tracking-widest text-primary">Sample: {activeResult.grain_type} — {selectedGrain.quality}</p>
+                  </div>
+                </div>
+
+                <div className="aspect-square w-full max-w-md mx-auto rounded-3xl overflow-hidden border-4 border-white shadow-2xl bg-[#F5F3EE]">
+                  <div 
+                    className="w-full h-full"
+                    style={{
+                      backgroundImage: `url(${activeResult.original_image || activeResult.annotated_image})`,
+                      backgroundPosition: `${(selectedGrain.bbox[0] / (activeResult.img_width - selectedGrain.bbox[2])) * 100}% ${(selectedGrain.bbox[1] / (activeResult.img_height - selectedGrain.bbox[3])) * 100}%`,
+                      backgroundSize: `${(activeResult.img_width / selectedGrain.bbox[2]) * 100}% ${(activeResult.img_height / selectedGrain.bbox[3]) * 100}%`,
+                      backgroundRepeat: 'no-repeat'
+                    }}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-surface-border">
+                  <div className="p-4 bg-background-soft rounded-2xl">
+                    <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-1">Dimensions</p>
+                    <p className="text-lg font-display text-text-header">{selectedGrain.width}px × {selectedGrain.height}px</p>
+                  </div>
+                  <div className="p-4 bg-background-soft rounded-2xl">
+                    <p className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest mb-1">Confidence Score</p>
+                    <p className="text-lg font-display text-text-header">{(selectedGrain.confidence * 100).toFixed(1)}%</p>
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <button onClick={() => setSelectedGrain(null)} className="btn-primary px-10 py-3">Close Inspection</button>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="space-y-6">
             <div className="flex items-center gap-3">
