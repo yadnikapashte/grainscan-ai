@@ -181,12 +181,27 @@ export default function ScannerPage() {
           </div>
         </button>
 
-        <div className="p-8 card-premium text-left bg-background-soft/50">
-          <div className="w-14 h-14 bg-text-body/10 rounded-2xl flex items-center justify-center text-text-body/60 mb-6 font-mono font-bold text-xs">DIR</div>
-          <h3 className="text-2xl font-display text-text-header mb-2 leading-tight">Directory Watch</h3>
-          <p className="text-text-body text-sm mb-4 font-mono leading-none py-2 px-3 bg-white border border-surface-border rounded-lg break-all">
-            ./scanner_watch/
+        <div className="p-8 card-premium text-left bg-primary/5 border-primary/20">
+          <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-6">
+            <Radio size={28} className="animate-pulse" />
+          </div>
+          <h3 className="text-2xl font-display text-text-header mb-2 leading-tight">Physical Hardware Setup</h3>
+          <p className="text-text-body text-xs mb-4 leading-relaxed">
+            To connect your Epson, HP, or Industrial scanner:
           </p>
+          <div className="space-y-3">
+            <div className="flex items-start gap-2">
+              <div className="w-4 h-4 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold mt-0.5">1</div>
+              <p className="text-[10px] text-text-body/70">Set scanner "Auto-Save" path to the folder below.</p>
+            </div>
+            <div className="p-3 bg-white border border-surface-border rounded-lg break-all">
+              <code className="text-[9px] font-bold text-primary">backend/scans_input/</code>
+            </div>
+            <div className="flex items-start gap-2">
+              <div className="w-4 h-4 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold mt-0.5">2</div>
+              <p className="text-[10px] text-text-body/70">Press the physical <b>Scan</b> button on your hardware.</p>
+            </div>
+          </div>
         </div>
       </div>
 

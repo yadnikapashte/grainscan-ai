@@ -1,0 +1,5 @@
+class,precision,recall,f1_score,support
+Broken,1.0,1.0,1.0,4
+Chalky,1.0,1.0,1.0,4
+Discolored,1.0,1.0,1.0,4
+Normal,1.0,1.0,1.0,4

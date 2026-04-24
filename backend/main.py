@@ -44,7 +44,7 @@ app.add_middleware(
 
 # Directories
 UPLOAD_DIR = Path("uploads")
-SCANNER_DIR = Path("scanner_watch")
+SCANNER_DIR = Path("scans_input")
 RESULTS_DIR = Path("results")
 ANNOTATED_DIR = Path("annotated")
 REPORTS_DIR = Path("reports")

@@ -165,6 +165,12 @@ backend/annotated/
 backend/results/
 backend/*.pth
 
+# ML Pipeline Exclusions
+ML_Pipeline/data/
+ML_Pipeline/rice/
+ML_Pipeline/**/best_model.pth
+backend/training_data/
+
 # OS
 .DS_Store
 Thumbs.db

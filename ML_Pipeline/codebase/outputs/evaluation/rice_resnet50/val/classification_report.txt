@@ -1,0 +1,10 @@
+              precision    recall  f1-score   support
+
+      Broken     1.0000    1.0000    1.0000         4
+      Chalky     1.0000    1.0000    1.0000         4
+  Discolored     1.0000    1.0000    1.0000         4
+      Normal     1.0000    1.0000    1.0000         4
+
+    accuracy                         1.0000        16
+   macro avg     1.0000    1.0000    1.0000        16
+weighted avg     1.0000    1.0000    1.0000        16
