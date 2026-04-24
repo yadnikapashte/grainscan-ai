@@ -1,0 +1,46 @@
+INFO     | =======================================================
+INFO     | Preprocessing: ensuring dataset split ...
+INFO     | [preprocess] Split data already exists. Skipping split.
+INFO     | Preprocessing: validating dataset directories …
+INFO     | [preprocess] train: 4 classes found in '../data/processed\train'.
+INFO     | [preprocess] val: 4 classes found in '../data/processed\val'.
+INFO     | [preprocess] test: 4 classes found in '../data/processed\test'.
+INFO     | Discovering training classes …
+INFO     |   Class 'Broken': 300 images total in dataset split.
+INFO     |   Class 'Chalky': 300 images total in dataset split.
+INFO     |   Class 'Discolored': 300 images total in dataset split.
+INFO     |   Class 'Normal': 300 images total in dataset split.
+INFO     | Discovering validation classes …
+INFO     |   Class 'Broken': 4 images total in dataset split.
+INFO     |   Class 'Chalky': 4 images total in dataset split.
+INFO     |   Class 'Discolored': 4 images total in dataset split.
+INFO     |   Class 'Normal': 4 images total in dataset split.
+INFO     | Discovering test classes …
+INFO     |   Class 'Broken': 6 images total in dataset split.
+INFO     |   Class 'Chalky': 6 images total in dataset split.
+INFO     |   Class 'Discolored': 6 images total in dataset split.
+INFO     |   Class 'Normal': 6 images total in dataset split.
+INFO     | Total classes: 4  ->  ['Broken', 'Chalky', 'Discolored', 'Normal']
+INFO     | Advanced augmentation enabled for training set.
+INFO     | Dataset created: 1200 samples, 4 classes.
+INFO     | Dataset created: 16 samples, 4 classes.
+INFO     | Dataset created: 24 samples, 4 classes.
+INFO     | DataLoaders ready — train: 37 batches | val: 1 batches | test: 1 batches
+INFO     | Loading pretrained model: 'resnet50' …
+INFO     | Model 'resnet50' ready — total params: 23,516,228 | trainable: 23,516,228 | output classes: 4
+INFO     | LR scheduler: CosineAnnealingLR
+INFO     | =======================================================
+INFO     | Training started — device: cpu | epochs: 10 | lr: 0.0005
+INFO     | =======================================================
+INFO     | Epoch 001/10 | Train loss: 1.0392  acc: 59.97% | Val loss: 0.7214  acc: 75.00% | 429.3s
+INFO     | Epoch 002/10 | Train loss: 0.8127  acc: 80.66% | Val loss: 0.4985  acc: 100.00% | 516.4s
+INFO     | Epoch 003/10 | Train loss: 0.7130  acc: 87.84% | Val loss: 0.4720  acc: 93.75% | 504.5s
+INFO     | Epoch 004/10 | Train loss: 0.6805  acc: 88.34% | Val loss: 0.4762  acc: 93.75% | 486.9s
+INFO     | Epoch 005/10 | Train loss: 0.6477  acc: 90.29% | Val loss: 0.4589  acc: 93.75% | 482.7s
+INFO     | Epoch 006/10 | Train loss: 0.6160  acc: 92.23% | Val loss: 0.4196  acc: 100.00% | 467.9s
+INFO     | Epoch 007/10 | Train loss: 0.5956  acc: 92.48% | Val loss: 0.4311  acc: 93.75% | 569.1s
+INFO     | Epoch 008/10 | Train loss: 0.6326  acc: 90.54% | Val loss: 0.4103  acc: 100.00% | 497.7s
+INFO     | Epoch 009/10 | Train loss: 0.6242  acc: 94.59% | Val loss: 0.3980  acc: 100.00% | 455.2s
+INFO     | Epoch 010/10 | Train loss: 0.5770  acc: 94.00% | Val loss: 0.3889  acc: 100.00% | 498.6s
+INFO     | Final model saved to 'outputs\models\final_model.pth'.
+INFO     | Training complete.

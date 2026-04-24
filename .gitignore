@@ -171,6 +171,9 @@ ML_Pipeline/rice/
 ML_Pipeline/**/best_model.pth
 backend/training_data/
 
+# Allow ML Pipeline logs
+!ML_Pipeline/codebase/outputs/logs/*.log
+
 # OS
 .DS_Store
 Thumbs.db

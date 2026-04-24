@@ -1,0 +1,37 @@
+2026-04-23 21:19:54,435 | INFO     | __main__ | =======================================================
+2026-04-23 21:19:54,435 | INFO     | __main__ | Preprocessing: ensuring dataset split ...
+2026-04-23 21:19:54,435 | INFO     | __main__ | [preprocess] Splitting raw data from ../rice ...
+2026-04-23 21:19:54,710 | INFO     | __main__ |   Class 'Broken': physically augmenting 39 images to reach 300...
+2026-04-23 21:19:56,613 | INFO     | __main__ |   Class 'Broken': reached 300 images in 'train'.
+2026-04-23 21:19:56,671 | INFO     | __main__ |   Class 'Broken': finished with 39 original train images.
+2026-04-23 21:19:56,934 | INFO     | __main__ |   Class 'Chalky': physically augmenting 39 images to reach 300...
+2026-04-23 21:19:58,924 | INFO     | __main__ |   Class 'Chalky': reached 300 images in 'train'.
+2026-04-23 21:19:59,043 | INFO     | __main__ |   Class 'Chalky': finished with 39 original train images.
+2026-04-23 21:19:59,513 | INFO     | __main__ |   Class 'Discolored': physically augmenting 39 images to reach 300...
+2026-04-23 21:20:01,794 | INFO     | __main__ |   Class 'Discolored': reached 300 images in 'train'.
+2026-04-23 21:20:01,896 | INFO     | __main__ |   Class 'Discolored': finished with 39 original train images.
+2026-04-23 21:20:02,160 | INFO     | __main__ |   Class 'Normal': physically augmenting 39 images to reach 300...
+2026-04-23 21:20:04,095 | INFO     | __main__ |   Class 'Normal': reached 300 images in 'train'.
+2026-04-23 21:20:04,167 | INFO     | __main__ |   Class 'Normal': finished with 39 original train images.
+2026-04-23 21:20:04,167 | INFO     | __main__ | [preprocess] Dataset split and physical offline augmentation complete.
+2026-04-23 21:20:04,168 | INFO     | __main__ | Preprocessing: validating dataset directories …
+2026-04-23 21:20:04,169 | INFO     | __main__ | [preprocess] train: 4 classes found in '../data/processed\train'.
+2026-04-23 21:20:04,169 | INFO     | __main__ | [preprocess] val: 4 classes found in '../data/processed\val'.
+2026-04-23 21:20:04,169 | INFO     | __main__ | [preprocess] test: 4 classes found in '../data/processed\test'.
+2026-04-23 21:20:04,170 | INFO     | __main__ | Discovering training classes …
+2026-04-23 21:20:04,171 | INFO     | __main__ |   Class 'Broken': 300 images total in dataset split.
+2026-04-23 21:20:04,171 | INFO     | __main__ |   Class 'Chalky': 300 images total in dataset split.
+2026-04-23 21:20:04,172 | INFO     | __main__ |   Class 'Discolored': 300 images total in dataset split.
+2026-04-23 21:20:04,174 | INFO     | __main__ |   Class 'Normal': 300 images total in dataset split.
+2026-04-23 21:20:04,175 | INFO     | __main__ | Discovering validation classes …
+2026-04-23 21:20:04,175 | INFO     | __main__ |   Class 'Broken': 4 images total in dataset split.
+2026-04-23 21:20:04,175 | INFO     | __main__ |   Class 'Chalky': 4 images total in dataset split.
+2026-04-23 21:20:04,177 | INFO     | __main__ |   Class 'Discolored': 4 images total in dataset split.
+2026-04-23 21:20:04,177 | INFO     | __main__ |   Class 'Normal': 4 images total in dataset split.
+2026-04-23 21:20:04,177 | INFO     | __main__ | Discovering test classes …
+2026-04-23 21:20:04,177 | INFO     | __main__ |   Class 'Broken': 6 images total in dataset split.
+2026-04-23 21:20:04,177 | INFO     | __main__ |   Class 'Chalky': 6 images total in dataset split.
+2026-04-23 21:20:04,177 | INFO     | __main__ |   Class 'Discolored': 6 images total in dataset split.
+2026-04-23 21:20:04,178 | INFO     | __main__ |   Class 'Normal': 6 images total in dataset split.
+2026-04-23 21:20:04,178 | INFO     | __main__ | Total classes: 4  ->  ['Broken', 'Chalky', 'Discolored', 'Normal']
+2026-04-23 21:20:04,178 | INFO     | __main__ | Advanced augmentation enabled for training set.

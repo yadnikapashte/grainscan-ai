@@ -1,0 +1,36 @@
+INFO     | =======================================================
+INFO     | Preprocessing: ensuring dataset split ...
+INFO     | [preprocess] Split data already exists. Skipping split.
+INFO     | Preprocessing: validating dataset directories …
+INFO     | [preprocess] train: 4 classes found in 'D:\Downloads\grain-analyzer\ML_Pipeline\data\processed\train'.
+INFO     | [preprocess] val: 4 classes found in 'D:\Downloads\grain-analyzer\ML_Pipeline\data\processed\val'.
+INFO     | [preprocess] test: 4 classes found in 'D:\Downloads\grain-analyzer\ML_Pipeline\data\processed\test'.
+INFO     | Discovering training classes …
+INFO     |   Class 'Broken': 300 images total in dataset split.
+INFO     |   Class 'Chalky': 300 images total in dataset split.
+INFO     |   Class 'Discolored': 300 images total in dataset split.
+INFO     |   Class 'Normal': 300 images total in dataset split.
+INFO     | Discovering validation classes …
+INFO     |   Class 'Broken': 4 images total in dataset split.
+INFO     |   Class 'Chalky': 4 images total in dataset split.
+INFO     |   Class 'Discolored': 4 images total in dataset split.
+INFO     |   Class 'Normal': 4 images total in dataset split.
+INFO     | Discovering test classes …
+INFO     |   Class 'Broken': 6 images total in dataset split.
+INFO     |   Class 'Chalky': 6 images total in dataset split.
+INFO     |   Class 'Discolored': 6 images total in dataset split.
+INFO     |   Class 'Normal': 6 images total in dataset split.
+INFO     | Total classes: 4  ->  ['Broken', 'Chalky', 'Discolored', 'Normal']
+INFO     | Advanced augmentation enabled for training set.
+INFO     | Explaining images from: D:\Downloads\grain-analyzer\ML_Pipeline\data\processed\test
+INFO     |   Class 'Broken': 6 images total in dataset split.
+INFO     |   Class 'Chalky': 6 images total in dataset split.
+INFO     |   Class 'Discolored': 6 images total in dataset split.
+INFO     |   Class 'Normal': 6 images total in dataset split.
+INFO     | Dataset created: 24 samples, 4 classes.
+INFO     | DataLoaders ready — train: 0 batches | val: 1 batches | test: 1 batches
+INFO     | Loading pretrained model: 'resnet50' …
+INFO     | Model 'resnet50' ready — total params: 23,516,228 | trainable: 23,516,228 | output classes: 4
+INFO     | =======================================================
+INFO     | Grad-CAM: explaining 10 test images (balanced across classes) …
+INFO     | Grad-CAM complete. 10 figures saved to 'D:\Downloads\grain-analyzer\ML_Pipeline\codebase\outputs\xai\rice_resnet50\test'.

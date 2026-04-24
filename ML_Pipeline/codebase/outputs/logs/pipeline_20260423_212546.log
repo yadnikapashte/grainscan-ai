@@ -1,0 +1,34 @@
+INFO     | =======================================================
+INFO     | Preprocessing: ensuring dataset split ...
+INFO     | [preprocess] Split data already exists. Skipping split.
+INFO     | Preprocessing: validating dataset directories …
+INFO     | [preprocess] train: 4 classes found in '../data/processed\train'.
+INFO     | [preprocess] val: 4 classes found in '../data/processed\val'.
+INFO     | [preprocess] test: 4 classes found in '../data/processed\test'.
+INFO     | Discovering training classes …
+INFO     |   Class 'Broken': 300 images total in dataset split.
+INFO     |   Class 'Chalky': 300 images total in dataset split.
+INFO     |   Class 'Discolored': 300 images total in dataset split.
+INFO     |   Class 'Normal': 300 images total in dataset split.
+INFO     | Discovering validation classes …
+INFO     |   Class 'Broken': 4 images total in dataset split.
+INFO     |   Class 'Chalky': 4 images total in dataset split.
+INFO     |   Class 'Discolored': 4 images total in dataset split.
+INFO     |   Class 'Normal': 4 images total in dataset split.
+INFO     | Discovering test classes …
+INFO     |   Class 'Broken': 6 images total in dataset split.
+INFO     |   Class 'Chalky': 6 images total in dataset split.
+INFO     |   Class 'Discolored': 6 images total in dataset split.
+INFO     |   Class 'Normal': 6 images total in dataset split.
+INFO     | Total classes: 4  ->  ['Broken', 'Chalky', 'Discolored', 'Normal']
+INFO     | Advanced augmentation enabled for training set.
+INFO     | Dataset created: 1200 samples, 4 classes.
+INFO     | Dataset created: 16 samples, 4 classes.
+INFO     | Dataset created: 24 samples, 4 classes.
+INFO     | DataLoaders ready — train: 37 batches | val: 1 batches | test: 1 batches
+INFO     | Loading pretrained model: 'resnet50' …
+INFO     | Model 'resnet50' ready — total params: 23,516,228 | trainable: 23,516,228 | output classes: 4
+INFO     | LR scheduler: CosineAnnealingLR
+INFO     | =======================================================
+INFO     | Training started — device: cpu | epochs: 40 | lr: 0.0005
+INFO     | =======================================================
