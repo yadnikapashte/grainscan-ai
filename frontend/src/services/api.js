@@ -92,6 +92,12 @@ export const grainApi = {
   health: async () => {
     const { data } = await api.get('/health')
     return data
+  },
+
+  /** Get ML model training metrics */
+  getMlMetrics: async () => {
+    const { data } = await api.get('/ml/metrics')
+    return data
   }
 }
 

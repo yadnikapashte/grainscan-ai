@@ -5,6 +5,7 @@
     "scanner": "Scanner",
     "batch": "Batch",
     "history": "History",
+    "ml_analysis": "ML Analysis",
     "dashboard": "Dashboard",
     "logout": "Logout",
     "profile": "Profile",
@@ -200,5 +201,36 @@
       "Automated trend monitoring for farm yield"
     ],
     "register": "Register your laboratory profile"
+  },
+  "ml_analysis": {
+    "title": "Model Performance Analysis",
+    "subtitle": "Deep Dive into AI Training Metrics, Evaluation Protocols and Model Accuracy.",
+    "summary": {
+      "accuracy": "Global Accuracy",
+      "f1": "F1 Score (Weighted)",
+      "recall": "Macro Recall",
+      "precision": "Macro Precision"
+    },
+    "history": {
+      "title": "Training & Validation History",
+      "subtitle": "Performance over 10 epochs of fine-tuning on laboratory grain dataset.",
+      "accuracy": "Accuracy (%)",
+      "loss": "Loss (Cross Entropy)"
+    },
+    "classification": {
+      "title": "Classification Metrics per Category",
+      "table": {
+        "class": "Grain Category",
+        "precision": "Precision",
+        "recall": "Recall",
+        "f1": "F1-Score",
+        "support": "Samples"
+      }
+    },
+    "confusion": {
+      "title": "Confusion Matrix",
+      "subtitle": "Visualizing inter-class misclassification patterns."
+    },
+    "empty": "No training metrics found. Please ensure logs are generated in the ML Pipeline."
   }
 }

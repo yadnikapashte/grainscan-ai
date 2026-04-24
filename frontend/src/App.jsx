@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import BatchPage from './pages/BatchPage'
 import HistoryPage from './pages/HistoryPage'
+import MLAnalysisPage from './pages/MLAnalysisPage'
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
               <Route path="/batch" element={<BatchPage />} />
               <Route path="/history" element={<HistoryPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/ml-analysis" element={<MLAnalysisPage />} />
             </Route>
           </Route>
 

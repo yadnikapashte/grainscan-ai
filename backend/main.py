@@ -14,6 +14,7 @@ from datetime import datetime
 from typing import Optional, List
 from concurrent.futures import ThreadPoolExecutor
 import functools
+import csv
 
 import cv2
 import numpy as np
@@ -48,12 +49,15 @@ SCANNER_DIR = Path("scans_input")
 RESULTS_DIR = Path("results")
 ANNOTATED_DIR = Path("annotated")
 REPORTS_DIR = Path("reports")
+ML_REPORTS_DIR = Path("../ML_Pipeline/codebase/outputs/reports")
 
 for d in [UPLOAD_DIR, SCANNER_DIR, RESULTS_DIR, ANNOTATED_DIR, REPORTS_DIR]:
     d.mkdir(exist_ok=True)
 
 # Mount static dirs
 app.mount("/annotated", StaticFiles(directory="annotated"), name="annotated")
+if ML_REPORTS_DIR.exists():
+    app.mount("/ml-reports", StaticFiles(directory=str(ML_REPORTS_DIR)), name="ml-reports")
 
 # ── Globals ────────────────────────────────────────────────────────────────────
 processor = GrainProcessor()
@@ -375,6 +379,36 @@ def get_result(result_id: str):
     if not path.exists():
         raise HTTPException(404, "Result not found")
     return JSONResponse(content=json.loads(path.read_text()))
+
+
+@app.get("/ml/metrics")
+def get_ml_metrics():
+    """Consolidate and return model training metrics and summary."""
+    try:
+        # 1. Global summary
+        summary_path = ML_REPORTS_DIR / "summary_metrics.json"
+        summary = json.loads(summary_path.read_text()) if summary_path.exists() else {}
+
+        # 2. Training log (history)
+        log_path = ML_REPORTS_DIR / "rice_resnet50_training_log.json"
+        history = json.loads(log_path.read_text()) if log_path.exists() else {}
+
+        # 3. Per-class metrics
+        class_metrics = []
+        csv_path = ML_REPORTS_DIR / "per_class_metrics.csv"
+        if csv_path.exists():
+            with open(csv_path, "r") as f:
+                reader = csv.DictReader(f)
+                class_metrics = [row for row in reader]
+
+        return {
+            "summary": summary,
+            "history": history,
+            "class_metrics": class_metrics,
+            "confusion_matrix_url": "/ml-reports/confusion_matrix.png"
+        }
+    except Exception as e:
+        raise HTTPException(500, f"Failed to load ML metrics: {str(e)}")
 
 
 # ── Background scanner loop ────────────────────────────────────────────────────
