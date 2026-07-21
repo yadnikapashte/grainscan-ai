@@ -158,6 +158,10 @@ yarn-error.log*
 dist/
 .vite/
 
+# Keep the frontend Supabase client tracked
+!frontend/src/lib/
+!frontend/src/lib/supabase.js
+
 # Backend dynamic folders
 backend/uploads/
 backend/scanner_watch/
