@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Layout from './components/Layout'
-import HomePage from './pages/HomePage'
 import UploadPage from './pages/UploadPage'
 import ScannerPage from './pages/ScannerPage'
 import DashboardPage from './pages/DashboardPage'
@@ -24,7 +23,7 @@ export default function App() {
           {/* Protected Main Layout Routes */}
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/upload" element={<UploadPage />} />
               <Route path="/scanner" element={<ScannerPage />} />
               <Route path="/batch" element={<BatchPage />} />
