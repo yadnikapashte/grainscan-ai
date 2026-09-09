@@ -138,6 +138,9 @@ def process_image_bytes(image_bytes: bytes, source: str = "upload") -> dict:
     _, original_buffer = cv2.imencode(".jpg", img)
     original_base64 = base64.b64encode(original_buffer).decode("utf-8")
 
+    # Save raw image for XAI explanation
+    cv2.imwrite(str(RESULTS_DIR / f"{result_id}_raw.jpg"), img)
+    
     # Save result to disk for persistence and reporting
     res_data = {
         "id": result_id,
@@ -409,6 +412,76 @@ def get_ml_metrics():
         }
     except Exception as e:
         raise HTTPException(500, f"Failed to load ML metrics: {str(e)}")
+
+
+@app.get("/explain/{result_id}/{grain_idx}")
+def get_explanation(result_id: str, grain_idx: int):
+    """Dynamically generate Grad-CAM explanation for a specific grain crop in a scan."""
+    # 1. Load results JSON
+    json_path = RESULTS_DIR / f"{result_id}.json"
+    if not json_path.exists():
+        raise HTTPException(404, "Scan result not found.")
+    
+    data = json.loads(json_path.read_text())
+    grains = data.get("grains", [])
+    
+    if grain_idx < 0 or grain_idx >= len(grains):
+        raise HTTPException(400, "Invalid grain index.")
+        
+    grain = grains[grain_idx]
+    x, y, w, h = grain["bbox"]
+    
+    # 2. Load raw image and crop it
+    raw_path = RESULTS_DIR / f"{result_id}_raw.jpg"
+    if not raw_path.exists():
+        raise HTTPException(404, "Raw image not found for this scan. Ensure you ran a new scan after this update.")
+        
+    img = cv2.imread(str(raw_path))
+    if img is None:
+        raise HTTPException(500, "Failed to read raw image.")
+        
+    # Apply identical 10px pad logic from processing.py
+    H, W = img.shape[:2]
+    x1, y1 = max(0, x - 10), max(0, y - 10)
+    x2, y2 = min(W, x + w + 10), min(H, y + h + 10)
+    crop = img[y1:y2, x1:x2].copy()
+    
+    # 3. Generate Grad-CAM via Classifier
+    label = grain["quality"]  # Target the predicted class
+    class_idx = 0
+    
+    if hasattr(classifier, 'model') and classifier.model is not None:
+        # Find the integer class index for this label
+        for idx, lbl_tuple in classifier.idx_to_label.items():
+            if lbl_tuple[1] == label:
+                class_idx = idx
+                break
+                
+        cam_info = getattr(classifier, 'get_gradcam', None)
+        if cam_info:
+            original_b64, heatmap_b64, overlay_b64, confidence = cam_info(crop, class_idx)
+            return {
+                "original": f"data:image/jpeg;base64,{original_b64}",
+                "heatmap": f"data:image/jpeg;base64,{heatmap_b64}",
+                "overlay": f"data:image/jpeg;base64,{overlay_b64}",
+                "confidence": confidence,
+                "label": label,
+                "grain_type": grain["grain_type"]
+            }
+            
+    # 4. Fallback (if model not loaded or CV mode is active)
+    _, orig_buf = cv2.imencode(".jpg", crop)
+    dummy_b64 = base64.b64encode(orig_buf).decode("utf-8")
+    
+    return {
+        "original": f"data:image/jpeg;base64,{dummy_b64}",
+        "heatmap": None,
+        "overlay": None,
+        "error": "XAI requires PyTorch model to be loaded. Currently using CV fallback.",
+        "confidence": grain["confidence"],
+        "label": label,
+        "grain_type": grain["grain_type"]
+    }
 
 
 # ── Background scanner loop ────────────────────────────────────────────────────

@@ -106,6 +106,81 @@ class GrainClassifier:
 
         grain_type, quality = self.idx_to_label[idx]
         return quality, grain_type, conf
+        
+    def get_gradcam(self, crop: np.ndarray, class_idx: int) -> Tuple[str, str, str, float]:
+        """
+        Dynamically run Grad-CAM for a crop and return base64 strings of the original, heatmap, and overlay.
+        Args:
+           crop: Numpy BGR image.
+           class_idx: The integer class index to explain.
+        Returns:
+           Tuple of (original_b64, heatmap_b64, overlay_b64, confidence)
+        """
+        import torch
+        import torch.nn.functional as F
+        import base64
+        
+        self.model.eval()
+        rgb = cv2.cvtColor(crop, cv2.COLOR_BGR2RGB)
+        tensor = self.transform(rgb).unsqueeze(0)
+        tensor = tensor.requires_grad_(True)
+        
+        # Attach hooks to the last convolutional layer
+        target_layer = self.model.layer4[-1]
+        
+        activations = []
+        gradients = []
+        
+        def save_activation(module, input, output):
+            activations.append(output.detach())
+            
+        def save_gradient(module, grad_input, grad_output):
+            gradients.append(grad_output[0].detach())
+            
+        handle_fw = target_layer.register_forward_hook(save_activation)
+        handle_bw = target_layer.register_full_backward_hook(save_gradient)
+        
+        # Forward Pass
+        logits = self.model(tensor)
+        probs = F.softmax(logits, dim=1)[0]
+        confidence = float(probs[class_idx].item())
+        
+        # Backward Pass
+        self.model.zero_grad()
+        logits[0, class_idx].backward()
+        
+        # Remove hooks to avoid memory leaks
+        handle_fw.remove()
+        handle_bw.remove()
+        
+        # Compute CAM
+        grads = gradients[0]
+        acts = activations[0]
+        weights = grads.mean(dim=(2, 3), keepdim=True)
+        cam = (weights * acts).sum(dim=1).squeeze(0)
+        cam = torch.relu(cam).cpu().numpy()
+        
+        # Normalize heatmap to [0, 1]
+        if cam.max() > cam.min():
+            cam = (cam - cam.min()) / (cam.max() - cam.min())
+        else:
+            cam = np.zeros_like(cam)
+            
+        # Create Visuals
+        h, w = crop.shape[:2]
+        heatmap_resized = cv2.resize(cam, (w, h))
+        heatmap_color = cv2.applyColorMap((heatmap_resized * 255).astype(np.uint8), cv2.COLORMAP_JET)
+        
+        # Overlay
+        alpha = 0.5
+        overlay = cv2.addWeighted(crop, 1 - alpha, heatmap_color, alpha, 0)
+        
+        def to_b64(img_array):
+            _, buf = cv2.imencode(".jpg", img_array)
+            return base64.b64encode(buf).decode("utf-8")
+            
+        # Convert heatmap to RGB format for standalone viewing if needed, but here we just send standard BGR since cv2.imencode handles BGR.
+        return to_b64(crop), to_b64(heatmap_color), to_b64(overlay), confidence
 
     def _cv_classify(self, crop: np.ndarray) -> Tuple[str, str, float]:
         """

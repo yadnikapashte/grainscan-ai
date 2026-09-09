@@ -5,7 +5,7 @@
     "scanner": "Scanner",
     "batch": "Batch",
     "history": "History",
-    "ml_analysis": "ML Analysis",
+    "ml_analysis": "AI Insights",
     "dashboard": "Dashboard",
     "logout": "Logout",
     "profile": "Profile",
@@ -203,34 +203,150 @@
     "register": "Register your laboratory profile"
   },
   "ml_analysis": {
-    "title": "Model Performance Analysis",
-    "subtitle": "Deep Dive into AI Training Metrics, Evaluation Protocols and Model Accuracy.",
+    "title": "AI Performance Dashboard",
+    "subtitle": "Understand how well the AI grades grain quality and where it makes mistakes.",
     "summary": {
-      "accuracy": "Global Accuracy",
-      "f1": "F1 Score (Weighted)",
-      "recall": "Macro Recall",
-      "precision": "Macro Precision"
+      "accuracy": "Grains Graded Correctly",
+      "f1": "Overall AI Health Score",
+      "recall": "Catch Rate (Rare Missed Defects)",
+      "precision": "Trust Level (Rare False Alarms)"
     },
     "history": {
-      "title": "Training & Validation History",
-      "subtitle": "Performance over 10 epochs of fine-tuning on laboratory grain dataset.",
-      "accuracy": "Accuracy (%)",
-      "loss": "Loss (Cross Entropy)"
+      "title": "Learning Progress",
+      "subtitle": "How the system improved its grading over practice cycles.",
+      "accuracy": "Learning Progress",
+      "loss": "Mistakes Made Over Time"
     },
     "classification": {
-      "title": "Classification Metrics per Category",
+      "title": "Performance by Grain Category",
       "table": {
         "class": "Grain Category",
-        "precision": "Precision",
-        "recall": "Recall",
-        "f1": "F1-Score",
+        "precision": "Trust Level",
+        "recall": "Catch Rate",
+        "f1": "Health Score",
         "support": "Samples"
       }
     },
     "confusion": {
-      "title": "Confusion Matrix",
-      "subtitle": "Visualizing inter-class misclassification patterns."
+      "title": "Where Mix-Ups Happen",
+      "subtitle": "See exactly which grain types the AI gets confused by (Actual vs. AI Prediction)."
     },
     "empty": "No training metrics found. Please ensure logs are generated in the ML Pipeline."
+  },
+  "ml_analysis_new": {
+    "header": {
+      "badge": "AI Insights",
+      "title": "Why did the AI decide this?",
+      "desc": "Upload a grain image or select a past scan to see the AI's reasoning — confidence level, visual focus areas, and recommended actions.",
+      "analyze_diff": "Analyze a different image",
+      "or_dashboard": "or open a scan from the Quality Dashboard"
+    },
+    "upload": {
+      "title": "Upload Image for Analysis",
+      "desc": "Upload a grain image to instantly generate Grad-CAM explanations",
+      "drop_title": "Drop an image here or click to browse",
+      "drop_desc": "JPG, PNG, WEBP — any grain image",
+      "analyzing": "Analyzing image with AI…",
+      "analyzing_sub": "Segmenting grains, running ResNet50, computing Grad-CAM…",
+      "processing": "Processing…",
+      "err_invalid": "Please select a valid image file.",
+      "err_fail": "Upload failed. Make sure the backend is running."
+    },
+    "summary": {
+      "title": "AI Summary",
+      "subtitle": "Based on actual scan results",
+      "pct_100": "All {{count}} detected {{type}} grains were classified as Normal — excellent batch quality.",
+      "pct_80": "{{pct}}% of {{count}} {{type}} grains are Normal. {{defects}} grains flagged for defects. Batch quality is good but minor inspection recommended.",
+      "pct_50": "{{pct}}% of {{count}} {{type}} grains are Normal. {{defects}} defective grains detected — further inspection is advised before dispatch.",
+      "pct_bad": "Only {{pct}}% of {{count}} {{type}} grains are Normal. Significant defects found. Manual verification is strongly recommended."
+    },
+    "confidence": {
+      "title": "AI Confidence",
+      "subtitle": "Select a grain to see how confident the AI is",
+      "select_grain": "Select Grain ({{count}} detected)",
+      "prediction": "Prediction",
+      "score": "Confidence",
+      "low_note": "⚠ AI confidence is low for this grain — treat the prediction as indicative only and perform a physical inspection to confirm the defect type before taking action.",
+      "disclaimer": "Confidence does not guarantee correctness. It reflects how certain the AI model is — not a definitive quality certificate."
+    },
+    "xai": {
+      "title": "Where the AI Was Looking",
+      "subtitle": "Grad-CAM visual explanation for Grain #{{idx}}",
+      "generating": "Generating AI explanation…",
+      "error": "Could not generate AI explanation. Try a newer scan.",
+      "not_avail": "Not available",
+      "original": {
+        "title": "Original Grain",
+        "desc": "The raw crop as seen by the AI"
+      },
+      "heatmap": {
+        "title": "Focus Heatmap",
+        "desc": "Red = key decision areas; Blue = less important"
+      },
+      "overlay": {
+        "title": "Overlay",
+        "desc": "Combined view showing where the AI was \"looking\""
+      },
+      "prediction_note": "Predicted:",
+      "prediction_confidence": "with {{conf}}% confidence.",
+      "prediction_disclaimer": "Confidence does not guarantee correctness — always cross-check with physical inspection for critical decisions."
+    },
+    "remedies": {
+      "section_title": "Recommended Remedy",
+      "Normal": {
+        "headline": "Grain is Ready for Storage or Dispatch",
+        "steps": [
+          "Proceed with standard bagging and storage in a dry, ventilated warehouse.",
+          "Maintain storage humidity below 14% to preserve quality.",
+          "Label batch with today's scan ID for traceability."
+        ]
+      },
+      "Broken": {
+        "headline": "Segregate and Regrade Broken Grains",
+        "steps": [
+          "Separate broken grains from the main batch using a mechanical sieve (1.6–1.8 mm).",
+          "Downgrade broken grain for secondary uses: flour milling, animal feed, or starch extraction.",
+          "Check threshing machine settings — excessive breakage often indicates improper drum speed.",
+          "Record breakage percentage for supplier quality feedback if applicable."
+        ]
+      },
+      "Chalky": {
+        "headline": "Re-Condition Chalky Grains Before Milling",
+        "steps": [
+          "Chalky appearance typically indicates immature harvest or rapid post-harvest drying.",
+          "Check grain moisture — re-dry slowly at 40–45 °C to reduce chalkiness without increasing breakage.",
+          "Blend chalky grains with translucent grains at ≤20% ratio to maintain acceptable grade.",
+          "Review field harvest timing — harvesting at 20–25% moisture reduces chalkiness at source."
+        ]
+      },
+      "Discolored": {
+        "headline": "Quarantine and Investigate Discolored Grains",
+        "steps": [
+          "Immediately segregate discolored grains from the batch to prevent cross-contamination.",
+          "Inspect for fungal growth (dark/black spots may indicate Aspergillus or Fusarium).",
+          "Test a sample for aflatoxin if discoloration is widespread — do NOT dispatch without clearance.",
+          "Trace discoloration cause: excess field moisture, improper storage, or pest damage.",
+          "Discolored grains failing safety tests should be disposed of per local regulatory guidelines."
+        ]
+      }
+    },
+    "advanced": {
+      "title": "Advanced Model Information",
+      "subtitle": "Technical metrics, training curves and confusion matrix",
+      "loading": "Loading model metrics…",
+      "empty": "No training metrics found. Ensure ML Pipeline reports are generated.",
+      "metrics": {
+        "accuracy": "Grains Graded Correctly",
+        "score": "Overall AI Health Score",
+        "trust": "Trust Level",
+        "catch": "Catch Rate"
+      },
+      "category_title": "Performance by Grain Category",
+      "category_score": "Score: {{score}}%",
+      "learning_title": "Learning Progress",
+      "mistakes_title": "Mistakes Made Over Time",
+      "confusion_title": "Where Mix-Ups Happen",
+      "confusion_desc": "See exactly which grain types the AI gets confused by (Actual vs. AI Prediction)"
+    }
   }
 }

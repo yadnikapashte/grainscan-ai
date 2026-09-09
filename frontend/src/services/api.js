@@ -5,7 +5,7 @@ import axios from 'axios'
 
 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
-const api = axios.create({ 
+const api = axios.create({
   baseURL: BASE,
   timeout: 60000 // 60 second timeout for large batches
 })
@@ -97,6 +97,18 @@ export const grainApi = {
   /** Get ML model training metrics */
   getMlMetrics: async () => {
     const { data } = await api.get('/ml/metrics')
+    return data
+  },
+
+  /** Get a specific scan result by ID */
+  getResult: async (resultId) => {
+    const { data } = await api.get(`/results/${resultId}`)
+    return data
+  },
+
+  /** Get dynamic Grad-CAM explanation for a specific grain */
+  getExplanation: async (resultId, grainIdx) => {
+    const { data } = await api.get(`/explain/${resultId}/${grainIdx}`)
     return data
   }
 }
